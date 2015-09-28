@@ -1,0 +1,103 @@
+\chapter{簡単なNSL回路}
+\label{chap:start}
+
+次の例題は、NSLで記述する回路です。この例題は、シミュレーション専用の文法（\textunderscore{}から始まる要素）を利用しているため、コンパイルしても、その部分は電子回路とはなりません。シミュレーションメッセージを出力するための記述です。この回路をtut0.nslという名前のテキストファイルとして用意してください。
+
+\reviewlistcaption{リスト1.1: tut0}
+\begin{reviewlist}
+\begin{alltt}
+declare tut0 simulation \{ \}
+
+module tut0 \{
+   \textunderscore{}finish("Hello World");
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+NSLの回路は、1つ以上のモジュールから構成します。モジュールは、入出力仕様を記述するdeclare文と動作本体の記述であるmodule文から構成します。どちらも、記述内容を \{ \} で囲みます。この例題のdeclare文には修飾語(simulation)がついています。この修飾語は、このモジュールがシミュレーション専用であり、論理合成の対象にならないことをコンパイラに伝えます。
+
+モジュールにはモジュール名が必要です。モジュール名は、declare文とmodule文で同じ名前にします。 モジュールを外部から見た使い方は、declare文によって定義します。例題のモジュールは、外部に対する入出力は持っていませんが、モジュール定義のためのdeclare文は省略できません。
+
+この回路には実行文がひとつあります。
+
+\begin{reviewemlist}
+\begin{alltt}
+\textunderscore{}finish("Hello World");
+\end{alltt}
+\end{reviewemlist}
+
+Cの記述と同様に、実行文の後ろには、セミコロン ; を書きます。（Cと同様に、複合文の後ろには不要です。）モジュール内に、複数の実行文を記述すると、それらの実行文は、並列に動作します。モジュールの実行文は、ハードウェアとして実現するため、電源投入とともに、動作を開始し、電源断まで、永続的に動作します。この点は、呼び出されたときにだけ動作する、プログラム言語の関数とは大きく異なるこ とに注意してください。ただし、この例題では、モジュール内の実行文は、シミュレーションを停止する文一つだけなので、実行を開始すると、すぐにシミュ レーションが停止します。（シミュレーションが停止しても、ハードウェアは消滅するわけではありません。）
+
+\textunderscore{}finish()は、メッセージをコンソールに出力し、シミュレーションを停止する関数です。\textunderscore{}から始まる関数群は、シミュレーション専用であり、実回路にはならないことに注意してください。シミュレーション専用の関数、変数には次のものがあります。これらの関数や変数は、VerilogHDLに対応する関数・変数があり、VerilogHDLに変換するときに、引数をそのまま引き渡します。
+
+\begin{table}[h]
+\reviewtablecaption{シミュレーション専用関数・変数}
+\begin{reviewtable}{|l|l|}
+\hline
+\textgt{\textunderscore{}finish(string, arg1, arg2,...)} & メッセージ出力後、シミュレーションを終了します。 \\  \hline
+\textgt{\textunderscore{}stop(string, arg1, arg2,...)} & メッセージ出力後、シミュレーションを停止します。 \\  \hline
+\textgt{\textunderscore{}display(string, arg1, arg2,...)} & メッセージを出力します。 \\  \hline
+\textgt{\textunderscore{}monitor(string, arg1,arg2,...)} & 引数に指定した端子が変化したときにメッセージを出力します。 \\  \hline
+\textgt{\textunderscore{}readmemh(file, mem)} & ファイルの内容を16進数として、メモリに読み込みます。 \\  \hline
+\textgt{\textunderscore{}readmemb(file, mem)} & ファイルの内容を2進数として、メモリに読み込みます。 \\  \hline
+\textgt{\textunderscore{}random} & 乱数を値として返します。（32ビット） \\  \hline
+\textgt{\textunderscore{}time} & シミュレーションタイムを返します。（64ビット） \\  \hline
+\textgt{\textunderscore{}init \{  \}} & simulationモジュール内のみに使える順次実行ブロック。\footnotemark[1]{} \\  \hline
+\textgt{\textunderscore{}delay(数値)} & \textunderscore{}initブロック内で、指定する数値クロックの遅延をします。 \\  \hline
+\end{reviewtable}
+\end{table}
+
+注） シミュレーション用に開発されたVerilogHDLと異なり、NSLには、他のモジュールの内部要素を直接HDLとして記述する方法はありません。これを補うものとして、シミュレーションの結果の波形ファイルには、全信号を出力することができます。
+
+\footnotetext[1]{\textunderscore{}initブロックは、シミュレーションの開始1クロック後から、動作を順次実行します。シミュレーションモジュールの他のブロックの内側でない場所に記述可能です。}
+
+NSLコンパイラは、モジュールが他のモジュールのインスタンスを階層的に利用する場合、declare文を読み、そ のモジュールの入出力仕様を判定します。例題では、declare文とmodule文を同一のファイルに記述していますが、declare文と module文の二つを分離したファイルとして、declare文は、複数のモジュールのものをまとめて、ヘッダファイルとして用意しておくと、大規模な 回路を作成する場合に便利です。
+
+シミュレーションを実行するために、この回路を、NSL COREでコンパイルします。
+ここでは、VerilogHDLコンパイラ Icarus Verilogを用いた例を出しますが、SystemCへの合成を行ってSystemCコンパイラによるシミュレーションも可能です。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut0.nsl -verisim2 -target tut0
+\end{alltt}
+\end{reviewcmd}
+
+この操作で、tut0.vというVerilogHDLのファイルができます。
+次に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut0.vvp tut0.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut0.vvp
+
+VCD info: dumpfile tut0.vcd opened for output.
+Hello World
+\end{alltt}
+\end{reviewcmd}
+
+NSL内に記述したメッセージを出力してシミュレーションが終了ましたね。VCD infoから始まる行はVerilogコンパイラが出しているメッセージです。
+
+SystemCへの合成は次のコマンドで行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2sc tut0.nsl -scsim2 -target tut0 -split
+\end{alltt}
+\end{reviewcmd}
+
+最後のオプション -split に注意してください。SystemCコンパイラはモジュールの宣言順序に制約条件があるため、NSLCOREはモジュールごと別々のファイルに合成し、インクルードの順序を制御してSystemCの要求する制約条件を満たします。このとき、シミュレーションテストベンチは、指定したモジュール名に\textunderscore{}simを付加したファイル名となります。(この場合にはtut0\textunderscore{}sim.sc)SystemC環境をどこにおくかによって、シミュレーション実行イメージのコンパイル方法は変わりますが、例として、LiveCygwinの場合を示します。g++コンパイラは .sc の拡張子のファイルをコンパイルできないので、ファイル名を修正して .cpp にしておきます。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} cp tut0\textunderscore{}sim.sc tut0\textunderscore{}sim.cpp
+\textgreater{} g++ -I/usr/local/systemc-2.2.0/include -L/usr/local/systemc-2.2.0/lib-cygwin -lsystemc -o  tut0\textunderscore{}sim.exe tut0\textunderscore{}sim.cpp
+\end{alltt}
+\end{reviewcmd}

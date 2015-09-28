@@ -1,0 +1,101 @@
+\chapter{整数変数と一時変数および構造展開}
+\label{chap:integer}
+
+NSLの多くの構文は、生成するハードウェアと一対一に対応しています。これは、ハードウェア設計者に見通しのよい言語を提供するためです。しかし、似たような構造を複数作成する場合には、記述量の圧縮のため、構造を展開する構文が便利に使えます。 NSLは、構造展開のために、整数変数、一時変数および構造展開構文を提供します。これらの構文は、コンパイル時に評価し、値が確定します。評価は、NSL文の記述順に行われ、実行時の動作順序とは無関係となることに注意してください。
+
+整数変数(integer)は、整数を記述できる部分に使えます。また、整数変数同士および整数の演算式を利用できます。
+
+\begin{reviewemlist}
+\begin{alltt}
+integer 変数名 ;
+\end{alltt}
+\end{reviewemlist}
+
+特別なケースとして、if文の条件に整数もしくは整数変数からなる式を指定した場合、コンパイル時に、真もしくは偽のいずれかの実行文のみ生成します。プリプロセッサによる条件コンパイルよりも、細やかな条件制御を可能としますが、多用すると、可読性の低下をもたらすことになるので、注意してください。
+
+一時変数(variable)は、幅を持ち、端子と同様に用います。ただし、端子と異なり、同一クロックで複数回の転送が可能であり、かつ、部分的な転送も行えます。これは、一時変数は、転送が出現するたびに、新たな端子を自動作成し、必要な演算を行うからです。一時変数の評価は記述順に行い、展開後の端子への転送は並列に実行します。
+
+\begin{reviewemlist}
+\begin{alltt}
+variable 変数名[ビット幅] ;
+\end{alltt}
+\end{reviewemlist}
+
+整数変数と一時変数を用いて回路を生成するための、generate文があります。
+
+\begin{reviewemlist}
+\begin{alltt}
+generate(整数変数=初期値 ; 整数変数式 ; 整数変数更新式 ) 実行文
+\end{alltt}
+\end{reviewemlist}
+
+次の例題は、generate構文を使い、巡回符号による擬似乱数生成回路を作成しています。一時変数vの各ビットへの値をgenerate文を用いて設定し、生成した結果をまとめてレジスタrに転送します。
+
+\reviewlistcaption{リスト13.1: tut11}
+\begin{reviewlist}
+\begin{alltt}
+declare glfsr \{
+   input seed[16];
+   output q[16];
+   func\textunderscore{}in set\textunderscore{}seed(seed);
+   func\textunderscore{}in next\textunderscore{}rand : q;
+\}
+
+module glfsr \{
+   reg r[16] = 0x39a5;
+   variable v[16];
+   integer i;
+   func next\textunderscore{}rand \{
+       generate (i=0;i\textless{}15;i++) \{
+           if((i == 13) \textbar{}\textbar{} (i == 12) \textbar{}\textbar{} (i == 10)) v[i] = r[i+1] \textasciicircum{} r[0];
+           else v[i] = r[i+1];
+           \}
+       v[15] = r[0];
+       r:=v;
+       return r;
+   \}
+
+   func set\textunderscore{}seed r:=seed;
+\}
+
+declare tut11 simulation \{\}
+
+module tut11 \{
+   glfsr rmod;
+   reg count[16]=0;
+   count++;
+   any \{
+       3'(count) == 7: \{
+           \textunderscore{}display("set seed:\%d",count+0x9876);
+           rmod.set\textunderscore{}seed(count+0x9876);
+       \}
+       count==10:    \textunderscore{}finish("finished");
+       else:    \textunderscore{}display("random generate \%d", rmod.next\textunderscore{}rand());
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+この例題を実行すると、下記のようになります。ここでは、Windows版NSL COREを用いて、シミュレーション用のVerilogHDLを作成します。LanguageがSimulationとなっていることを確認し、右下のTargetにtu11を記入した上で、tut11.nslをVerilogHDLシミュレーションファイルに変換してください。その後、Icarus Verilogでコンパイル、シミュレーションを行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -otut11.vvp tut11.v
+\textgreater{} vvp tut11.vvp
+
+VCD info: dumpfile tut11.vcd opened for output.
+random generate 14757
+random generate 14757
+random generate 43218
+random generate 21609
+random generate 40500
+random generate 20250
+random generate 10125
+random generate 42950
+set seed:39037
+random generate 39037
+random generate 63550
+finished
+\end{alltt}
+\end{reviewcmd}

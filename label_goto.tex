@@ -1,0 +1,143 @@
+\chapter{ラベルとgoto文}
+\label{chap:label_goto}
+
+ソフトウェアの世界では、goto文は排除する方が見通しのよいプログラムとなります。ところが、1クロックの隙間も惜しむハードウェア設計では、forやwhileなどの構造化機構だけでは、詰め切れないタイミングを調整するためにgoto文が必要となることがあります。NSLのgoto文は、シーケンスブロックの制御に用います。後述する、ステートマシンの状態遷移にもgoto文を使いますが、両者はまったく別のものです。
+
+goto文で実行制御を切り替える先にはラベルが必要です。ラベルは、label\textunderscore{}name文で、シーケンスブロックの先頭部分において宣言し、ラベル名： の形で、切り替え先を定義します。
+
+次に示す例は、goto文を用いて、ある条件を待ち合わせます。ここで、if文で判定した結果が偽の時に、elseの文が実行されるため、同じクロック内で、値を取り込むことができます。この形式の回路は、出力タイミングが不明な外部ブロックとの待ち合わせなどに用いることができます。
+
+\begin{reviewemlist}
+\begin{alltt}
+func ex seq \{
+ label\textunderscore{}name l1;
+ reg value;
+ l1: if(!condition) goto l1;
+     else value:=something;
+\}
+\end{alltt}
+\end{reviewemlist}
+
+この例は、関数exの処理の中で、conditionが偽の間は、処理を停止し、真となったときに、その値をレジスタvalueに取り込みます。この関数は、シーケンスブロックを用いて、複数クロックでの動作をするので、関数から値を返すためのreturn文は利用できないことに注意ください。 return文は、記述可能ですが、関数を呼び出したクロックと異なるタイミングで値が返るので、呼び出した側が受け取る手段が限られます。
+
+次の例題は、割り算回路のサブモジュールを呼び出します。割り算回路が出立関数で結果を報告したときに、その値を表示します。
+
+\reviewlistcaption{リスト10.1: tut8}
+\begin{reviewlist}
+\begin{alltt}
+declare tut8 simulation \{\}
+\#define N 10
+\#define M 8
+
+declare divu\textunderscore{}\%N\%\textunderscore{}\%M\% \{
+input A[N],B[M];
+output Q[N],R[M];
+func\textunderscore{}in divu\textunderscore{}do(A,B);
+func\textunderscore{}out divu\textunderscore{}done(Q,R);
+func\textunderscore{}out divu\textunderscore{}error;
+\}
+
+module divu\textunderscore{}\%N\%\textunderscore{}\%M\% \{
+reg QB[M], QQ[N+M];
+wire sub\textunderscore{}i1[N+1], sub\textunderscore{}i2[N], minus;
+func\textunderscore{}self sub(sub\textunderscore{}i1,sub\textunderscore{}i2);
+
+func sub \{
+wire sub\textunderscore{}o[N+1];
+ sub\textunderscore{}o = \{sub\textunderscore{}i1\} - \{0b0,sub\textunderscore{}i2\};
+ minus=sub\textunderscore{}o[N];
+\}
+
+func divu\textunderscore{}do  \{
+   if(B==M'b0) divu\textunderscore{}error();
+   else seq \{
+   reg bitcount[M];
+   for( \{bitcount:=0; QB:=B; QQ:=\{M'b0,A\};\} ;
+             bitcount \textless{} N ; bitcount++) \{
+       if(sub(QQ[N+M-1:M-1],(N'(QB)\textless{}\textless{}(N-M))).minus) \{
+        QQ := (QQ \textless{}\textless{} 1) ;
+       \}
+       else \{
+        QQ := \{(sub\textunderscore{}o \textless{}\textless{} 1)[N:N-M],(QQ[N-2:0]\textless{}\textless{}1)\} \textbar{} (N+M)'b1;
+       \}
+        \}
+   divu\textunderscore{}done(QQ[N-1:0],QQ[(N+M-1):N]);
+   \}
+   \}
+\}
+
+module tut8 \{
+   divu\textunderscore{}\%N\%\textunderscore{}\%M\%  divid;
+   reg  a[N], b[M];
+   func\textunderscore{}self go();
+   reg count[16]=0;
+   count++;
+   if(count == 10) go();
+   if(divid.divu\textunderscore{}error) \textunderscore{}finish("divid error");
+
+   func go seq \{
+       label\textunderscore{}name wait\textunderscore{}res;
+       \{
+           a:=N'(\textunderscore{}random);
+           b:=M'(\textunderscore{}random);
+       \}
+       \{
+           divid.divu\textunderscore{}do(a,b);
+           \textunderscore{}display("start \%d/\%d",a,b);
+       \}
+       wait\textunderscore{}res:
+       if(!divid.divu\textunderscore{}done) goto wait\textunderscore{}res;
+       else \textunderscore{}display("result = \%d : \%d",divid.Q, divid.R);
+       \textunderscore{}finish();
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+それでは、実行してみましょう。ここでは、Windows版NSL COREを用いて、シミュレーション用のVerilogHDLを作成します。LanguageがSimulationとなっていることを確認し、右下のTargetにtu8を記入した上で、tut8.nslをVerilogHDLシミュレーションファイルに変換してください。その後、Icarus Verilogでコンパイル、シミュレーションを行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut8.vvp tut8.v
+\textgreater{} vvp tut8.vvp
+
+VCD info: dumpfile tut8.vcd opened for output.
+start  911/ 18
+result =   50 :  11
+\end{alltt}
+\end{reviewcmd}
+
+goto文を使わずに、サブモジュールの出立関数の関数文を用いて、tut8と同様の処理を行うこともできます。この例では、こちらの方が、goto文を用いるより、構造的になっているので、分かりやすいでしょう。この例のように、ほとんどのgoto文は、関数を適切に記述することで、置き換え可能です。設計者は、goto文を使わずに可能な方法がないのか、回路記述の見通しを悪くしないように慎重に検討してください。
+
+\reviewlistcaption{リスト10.2: tut8\textunderscore{}alt}
+\begin{reviewlist}
+\begin{alltt}
+module tut8\textunderscore{}alt \{
+   divu\textunderscore{}\%N\%\textunderscore{}\%M\%  divid;
+   reg  a[N], b[M];
+   func\textunderscore{}self go();
+   reg count[16]=0;
+   count++;
+   if(count == 10) go();
+   if(divid.divu\textunderscore{}error) \textunderscore{}finish("divid error");
+
+   func go seq \{
+       \{
+           a:=N'(\textunderscore{}random);
+           b:=M'(\textunderscore{}random);
+       \}
+       \{
+           divid.divu\textunderscore{}do(a,b);
+           \textunderscore{}display("start \%d/\%d",a,b);
+       \}
+   \}
+
+   func divid.divu\textunderscore{}done seq \{
+       \textunderscore{}display("result = \%d : \%d",divid.Q, divid.R);
+       \textunderscore{}finish();
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+

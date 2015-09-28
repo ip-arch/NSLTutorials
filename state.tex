@@ -1,0 +1,87 @@
+\chapter{ステートマシンと状態遷移}
+\label{chap:state}
+
+論理設計において、呼び出されたときに起動する手続きではなく、静的な状態変数を持つ回路を作りたい場合があります。NSLは、このようなケースに対応し、ステートマシンを作成する構文を持ちます。状態変数は、リセット時に初期化され、状態遷移によって、遷移先の状態に書き換えます。ステートマシンは、構成要素として、モジュール、複合文の中で定義できます。複合文で定義したステートマシンは、複合文の中だけの、局所的なステートマシンとなることに注意してください。ステートマシンの定義は、下記の構文で行います。先頭の状態が、ステートマシンの初期状態になります。
+
+\begin{reviewemlist}
+\begin{alltt}
+state\textunderscore{}name 状態名1, 状態名2, 状態名3, .... ;
+\end{alltt}
+\end{reviewemlist}
+
+ステートマシンを定義したら、各状態に対応する動作を記述します。動作の記述は、state文を使います。
+
+\begin{reviewemlist}
+\begin{alltt}
+state 状態名 実行文
+\end{alltt}
+\end{reviewemlist}
+
+state文の中で、他の状態に遷移する場合、goto文を用います。シーケンスブロックのgoto文とは、全く異なることに注意してください。
+
+\begin{reviewemlist}
+\begin{alltt}
+goto 状態名 ;
+\end{alltt}
+\end{reviewemlist}
+
+次に、ステートマシンの例題を示します。
+
+\reviewlistcaption{リスト12.1: tut10}
+\begin{reviewlist}
+\begin{alltt}
+declare tut10 simulation \{\}
+
+module tut10 \{
+   state\textunderscore{}name state1, state2, state3;
+   state state1 \{
+       reg c1[2]=0;
+       if(c1++ == 3) goto state2;
+       \textunderscore{}display("in state1 \%d",c1);
+   \}
+
+   state state2 \{
+       reg c2[2]=0;
+       if(c2++ == 3) goto state3;
+       \textunderscore{}display("in state2 \%d",c2);
+   \}
+
+   state state3 \{
+       reg c3[2]=0;
+       if(c3++ == 3) \{goto state1; \textunderscore{}finish();\}
+       \textunderscore{}display("in state3 \%d",c3);
+   \}
+ \}
+\end{alltt}
+\end{reviewlist}
+
+
+状態変数は静的であり、state文は、実行の条件がそろった上で、状態変数が指定した状態になっている場合に、実行を行うことに注意してください。たとえば、関数や手続き内にステートマシンを作成したとき、state文を記述しても、その関数もしくは手続きが動作していなければ、状態変数が一致していても、実行は行われません。
+
+それでは、実行してみましょう。ここでは、Windows版NSL COREを用いて、シミュレーション用のVerilogHDLを作成します。LanguageがSimulationとなっていることを確認し、右下のTargetにtu10を記入した上で、tut10.nslをVerilogHDLシミュレーションファイルに変換してください。その後、Icarus Verilogでコンパイル、シミュレーションを行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -otut10.vvp tut10.v
+\textgreater{} vvp tut10.vvp
+
+VCD info: dumpfile tut10.vcd opened for output.
+in state1 0
+in state1 0
+in state1 1
+in state1 2
+in state1 3
+in state2 0
+in state2 1
+in state2 2
+in state2 3
+in state3 0
+in state3 1
+in state3 2
+in state3 3
+\end{alltt}
+\end{reviewcmd}
+
+シミュレーションで、最初に state1の0の値が2行出ているのは、リセット時にもクロックが入力されていて、（\textunderscore{}display文など）リセット信号が入っていない回路が動作しているからです。
+
+ステートマシンの利用上、注意していただきたい点があります。状態変数の初期化はリセットのときに行われますが、通常の動作中は行われないので、手続きに記述した状態を、手続きの呼出しごとに初期状態に戻したい場合、手続きの終了前に、初期状態に遷移するgoto文を記述する必要があります。

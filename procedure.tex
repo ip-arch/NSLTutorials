@@ -1,0 +1,304 @@
+\chapter{手続き}
+\label{chap:procedure}
+
+複雑な論理回路は、多くの場合、パイプライン制御や状態制御を行います。NSLは、これらの制御構造を陽に表す文法を持ちます。その一つが手続きです。手続き(proc)は、呼び出しを受けたら、クロックに同期して起動を行い、他の手続きを呼び出すか、自ら終了を宣言する（finish()の実行）まで動作を続けます。手続きの宣言には、レジスタ型の仮引数を指定できます。手続きを呼び出すときに指定した値が、仮引数に転送された上で、手続きが起動します。
+
+手続きが終了するクロックにおいて、他の手続き（もしくは自分自身）から起動を受けると、終了処理を実行しながら、次のクロックで再度起動を行います。これにより、パイプライン動作を円滑に記述可能です。
+
+手続きの大きな用途の一つは、パイプラインステージの記述です。この場合、仮引数にはパイプラインレジスタを指定します。手続きが動作している状態を状態遷移マシンの状態とみなして回路を構成することも可能です。他の手続きを呼び出すことで、状態を遷移できます。また、関数の中で、まとまった処理を別途行わせる用途にも使います。シーケンスブロックの（他のブロックやif文の下にない）トップレベルに手続き呼び出しを記述すると、シーケンスブロックは、手続きが終了するまで、実行を保留します。手続きが終了するクロックにおいて、手続き呼び出しの次の文が、手続きの終了時処理と同時に実行されます。
+
+手続きは、構成要素の宣言として記述します。
+
+\begin{reviewemlist}
+\begin{alltt}
+proc\textunderscore{}name  手続き名(仮引数1, 仮引数2, ...);
+\end{alltt}
+\end{reviewemlist}
+
+仮引数は、省略可能です。（その場合にも括弧は必要です。）
+
+手続きを呼び出す場合には、
+
+\begin{reviewemlist}
+\begin{alltt}
+手続き名(実引数1, 実引数2, ...);
+\end{alltt}
+\end{reviewemlist}
+
+とします。手続き中で、他の手続きを呼び出すと、呼び出した側の手続きは終了します。また、明示的に終了する場合、
+
+\begin{reviewemlist}
+\begin{alltt}
+finish();
+\end{alltt}
+\end{reviewemlist}
+
+\begin{reviewemlist}
+\begin{alltt}
+手続き名.finish();
+\end{alltt}
+\end{reviewemlist}
+
+を記述します。上の形式は、手続き内のみで利用可能で、記述した手続き自身を終了します。下の形式は、手続き外からも記述可能で、指定した手続きを終了させます。
+
+シーケンスブロックを手続き内で利用することもできます。次の例題は、上記の例題tut13の内部関数の代わりに手続きを用いるものです。手続きにおけるシーケンスブロックでは、最初の動作文は手続きを呼び出した時点ではなく、手続きの実行が開始されたときに実行することに注意してください。（NSLでは、関数の実行は、関数を呼び出したクロックで開始されるのに対し、手続きは、呼び出した次のクロックで実行を開始します）
+
+例題の記述を示します。
+
+\reviewlistcaption{リスト11.1: tut14}
+\begin{reviewlist}
+\begin{alltt}
+declare tut14 simulation \{ \}
+
+module tut14 \{
+    reg count[8] = 0;
+    reg value[8];
+    proc\textunderscore{}name  start(value);
+
+    count++;
+    if(count==100) start(count);
+    if(count==200) \textunderscore{}finish("countX = \%d", count);
+
+    proc start seq \{
+        \textunderscore{}display("Hello World: value = \%d, count1 = \%d", value, count);
+        \textunderscore{}display("count2 = \%d", count);
+        \textunderscore{}display("count3 = \%d", count);
+	finish;
+    \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+シミュレーションするために、この回路を、NSL COREでコンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut14.nsl -verisim2 -target tut14
+\end{alltt}
+\end{reviewcmd}
+
+こ の操作で、tut14.vというVerilogHDLのファイルができます。
+次 に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut14.vvp tut14.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみ ましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut14.vvp
+VCD info: dumpfile tut14.vcd opened for output.
+Hello World: value = 100, count1 = 101
+count2 = 102
+count3 = 103
+countX = 200
+\end{alltt}
+\end{reviewcmd}
+
+手続きは、呼び出した次のクロックから開始され、引数はレジスタで渡されるので、実行結果は、上のように、引数はカウント値より一つ小さな値となります。
+
+通常、手続きから他の手続きを実行する場合、呼び出した上位の手続きは終了し、動作を移譲しますが、例外として、手続き内のシーケンスブロックにおいて、シーケンスブロックの（他のブロック中でない）トップレベルの動作文が手続きを呼び出す場合には、呼び出した手続きをサブルーチンとして扱い、サブルーチンが終了した後、シーケンスブロックの次の動作文が実行されます。
+
+次の例題を見てください。
+
+\reviewlistcaption{リスト11.2: tut15}
+\begin{reviewlist}
+\begin{alltt}
+declare tut15 simulation \{ \}
+
+module tut15 \{
+    reg count[8] = 0;
+    reg value[8];
+    proc\textunderscore{}name  start(value), subproc();
+
+    count++;
+    if(count==100) start(count);
+    if(count==200) \textunderscore{}finish("countX = \%d", count);
+
+    proc start seq \{
+        \textunderscore{}display("count1 = \%d", count);
+        \textunderscore{}display("count2 = \%d", count);
+	subproc();
+        \textunderscore{}display("count3 = \%d", count);
+	finish;
+    \}
+
+    proc subproc seq \{
+        \textunderscore{}display("sub:count1 = \%d", count);
+        \textunderscore{}display("sub:count2 = \%d", count);
+        \textunderscore{}display("sub:count3 = \%d", count);
+	finish;
+    \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+この例題には二つの手続き start, subprocを定義しています。start手続きはシーケンスブロックから subprocを呼び出しています。
+
+シミュレーションするために、この回路を、NSL COREでコンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut15.nsl -verisim2 -target tut15
+\end{alltt}
+\end{reviewcmd}
+
+この操作で、tut15.vというVerilogHDLのファイルができます。
+次に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut15.vvp tut15.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut15.vvp
+VCD info: dumpfile tut15.vcd opened for output.
+count1 = 101
+count2 = 102
+sub:count1 = 104
+sub:count2 = 105
+sub:count3 = 106
+count3 = 107
+countX = 200
+\end{alltt}
+\end{reviewcmd}
+
+Count2まで実行した後で、count==103のクロックにおいて、サブルーチンとしてsubprocが呼び出されます。procの呼び出しは、呼び出した次のクロックで発生するので、サブルーチンの実行クロックはcount==104からとなります。サブルーチン手続きの最後の実行文は、呼び出し元のシーケンスブロックにおけるサブルーチン呼び出し直後の動作文と同一クロックで実行します。ここでは、サブルーチンとなるsubprocのfinishが、呼び出し元の\textunderscore{}displayと同時に実行されるため、count3の値は107となっています。
+
+次にシーケンスを用いない手続きの使い方を示しましょう。
+
+次の例題は、5個の命令を実装する、8ビットの小さなCPUと、そのシミュレーション用のモジュールです。
+
+\reviewlistcaption{リスト11.3: tut9}
+\begin{reviewlist}
+\begin{alltt}
+\#define ADD 0
+\#define LD  1
+\#define ST  2
+\#define JMP 3
+\#define JZ  4
+
+declare cpu \{
+   inout data[8];
+   output address[8];
+   func\textunderscore{}out mread(address) : data;
+   func\textunderscore{}out mwrite(address,data);
+\}
+
+module cpu \{
+   reg count[8]=0, pc[8], op[8], im[8], acc[8]=0;
+   proc\textunderscore{}name ift(pc), imm(op), exe(im);
+
+   any \{
+       count \textless{} 20: count++;
+       count == 10: ift(0);
+   \}
+
+   proc ift \{
+       imm(mread(pc++));
+   \}
+
+   proc imm \{
+       exe(mread(pc++));
+   \}
+
+   proc exe \{
+       wire nextpc[8];
+       any \{
+           op == ADD: acc:=acc+im;
+           op == LD:  acc:=mread(im);
+           op == ST:  mwrite(im,acc);
+       \}
+       any \{
+           op == JMP: nextpc=im;
+           (op == JZ) \&\& (acc == 0): nextpc=im;
+           else: nextpc=pc;
+       \}
+       ift(nextpc);
+   \}
+\}
+
+
+declare tut9 simulation \{\}
+
+module tut9 \{
+   mem mainmem[256][8] = \{ADD, 2, JZ, 10, ST, 32, ADD, -1, JMP, 2, ST, 255\};
+   cpu tut9cpu;
+
+   func tut9cpu.mread \{
+       \textunderscore{}display("READ: ADDRESS:\%x, DATA:\%x", tut9cpu.address, mainmem[tut9cpu.address]);
+       return mainmem[tut9cpu.address];
+   \}
+
+   func tut9cpu.mwrite \{
+       \textunderscore{}display("WRITE: ADDRESS:\%x, DATA:\%x", tut9cpu.address, tut9cpu.data);
+       mainmem[tut9cpu.address] := tut9cpu.data;
+       if(tut9cpu.address == 255) \textunderscore{}finish("SIM STOP");
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+モジュールCPUが、CPUの回路となり、tut9がシミュレーションモジュールになります。
+
+CPUは、8ビットの双方向データバス、8ビットのアドレス バスを持ち、メモリの読み込み(mread)、書き込み(mwrite)の出立関数でCPUの外に置くメモリとの入出力を行います。CPUは、3つの手続き(ift, imm, exe)を持ち、それぞれ、8ビットの仮引数レジスタ(pc, op, im)を指定します。これらの手続きは、命令読み出し、即値読み出し、命令実行を行う手続きになります。
+
+シミュレーションモジュールtut9は、CPUをインスタンスtut9cpuとして定義し、命令をあらかじめ書き込んだ主記憶mainmemを構成要素として持ちます。CPUの二つの出立関数に対するメモリとしての振る舞い応答を行っています。
+
+CPUは、内部カウンタレジスタcountが10となったところで、0番地から命令実行を開始します。ここでは、Windows版NSL COREを用いて、シミュレーション用のVerilogHDLを作成します。LanguageがSimulationとなっていることを確認し、右下のTargetにtu9を記入した上で、tut9.nslをVerilogHDLシミュレーションファイルに変換してください。その後、Icarus Verilogでコンパイル、シミュレーションを行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -otut9.vvp tut9.v
+\textgreater{} vvp tut9.vvp
+VCD info: dumpfile tut9.vcd opened for output.
+READ: ADDRESS:00, DATA:00
+READ: ADDRESS:01, DATA:02
+READ: ADDRESS:02, DATA:04
+READ: ADDRESS:03, DATA:0a
+READ: ADDRESS:04, DATA:02
+READ: ADDRESS:05, DATA:20
+WRITE: ADDRESS:20, DATA:02
+READ: ADDRESS:06, DATA:00
+READ: ADDRESS:07, DATA:ff
+READ: ADDRESS:08, DATA:03
+READ: ADDRESS:09, DATA:02
+READ: ADDRESS:02, DATA:04
+READ: ADDRESS:03, DATA:0a
+READ: ADDRESS:04, DATA:02
+READ: ADDRESS:05, DATA:20
+WRITE: ADDRESS:20, DATA:01
+READ: ADDRESS:06, DATA:00
+READ: ADDRESS:07, DATA:ff
+READ: ADDRESS:08, DATA:03
+READ: ADDRESS:09, DATA:02
+READ: ADDRESS:02, DATA:04
+READ: ADDRESS:03, DATA:0a
+READ: ADDRESS:0a, DATA:02
+READ: ADDRESS:0b, DATA:ff
+SIM STOP
+WRITE: ADDRESS:ff, DATA:00
+\end{alltt}
+\end{reviewcmd}
+
+動作の状況を波形ビュアで見てみましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} gtkwave tut9.vcd
+\end{alltt}
+\end{reviewcmd}
+
+図で見るように、3つの手続き、ift,imm,exeが順次起動され、手続きに従って命令が実行されています。

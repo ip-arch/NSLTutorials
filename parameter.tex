@@ -1,0 +1,86 @@
+\chapter{パラメータ}
+\label{chap:parameter}
+
+パラメータには整数パラメータ(param\textunderscore{}int)と、文字列パラメータ(param\textunderscore{}str)があります。NSLでは、パラメータは二つの使い方をします。一つ目は、構造展開を行う時の制御変数としての使い方です。制御変数として用いる場合には、パラメータに値を設定します。この場合、パラメータは、モジュールの外に定義し、大域変数扱いになります。
+
+\begin{reviewemlist}
+\begin{alltt}
+param\textunderscore{}int パラメータ名 = 整数;
+
+param\textunderscore{}str パラメータ名 = 文字列;
+\end{alltt}
+\end{reviewemlist}
+
+if文の条件式において、パラメータ名を用いて比較演算を行うことができます。整数パラメータの比較は、整数変数と同一の演算子を用います。文字列の比較には、一致（==）と不一致（!=）が利用可能です。
+
+\begin{reviewemlist}
+\begin{alltt}
+param\textunderscore{}str MODE = "SIM";
+
+module cpu \{
+ if(MODE == "SIM") \{
+   \textunderscore{}display("PC: \%4X", pc);
+ \}
+\end{alltt}
+\end{reviewemlist}
+
+他の使い方として、NSL以外の言語（VerilogHDLやVHDL）で作成されたモジュールへのパラメータ設定があります。他言語のモジュールをインスタンスとして利用する場合に、場合によって、それらのモジュールに指定されたパラメータを与える必要があります。このため、他言語のモジュールのプロトタイプを指定するdeclare文において、パラメータを宣言することができます。
+
+\begin{reviewemlist}
+\begin{alltt}
+param\textunderscore{}int パラメータ名;
+param\textunderscore{}str パラメータ名;
+\end{alltt}
+\end{reviewemlist}
+
+サブモジュールのインスタンス宣言において、パラメータに値をセットすることで、生成されたVerilogHDLもしくはVHDLにパラメータを渡します。
+
+\begin{reviewemlist}
+\begin{alltt}
+モジュール名 サブモジュールインスタンス名(パラメータ名=値, パラメータ名=値) ;
+\end{alltt}
+\end{reviewemlist}
+
+初期値を設定した整数パラメータと、文字列パラメータは、整数もしくは文字列として、if文の構造展開の条件式に用いることができます。
+
+次の記述は、Xilinx社のFPGAのクロックモジュール(DCM)とグローバルバッファ(BUFG)を用いて、クロック配線を作る例題です。DCMには、ユーザが与えなくてはならないパラメータがあり、これをNSLから設定しています。この例題は、論理合成専用の例題で、一部のモジュールはdeclareしかないしシミュレーション実行部分がないので、実行して確かめることはできませんが、記述方法の参考にしてください。
+
+\reviewlistcaption{リスト14.1: tut12}
+\begin{reviewlist}
+\begin{alltt}
+declare DCM interface \{
+param\textunderscore{}int CLKDV\textunderscore{}DIVIDE;
+param\textunderscore{}str CLK\textunderscore{}FEEDBACK;
+input RST, PSINCDEC, PSEN, PSCLK, CLKIN, CLKFB;
+output PSDONE, CLK0, CLK90, CLK180, CLK270,
+ CLK2X, CLK2X180, CLKDV, CLKFX, CLKFX180,
+ LOCKED, STATUS[8];
+\}
+declare BUFG interface \{
+input I;
+output O;
+\}
+
+declare sample \{
+input samplein;
+output sampleout;
+\}
+
+declare tut12 \{\}
+module tut12 \{
+BUFG buff;
+DCM dcm2(CLKDV\textunderscore{}DIVIDE=4, CLK\textunderscore{}FEEDBACK="1X");
+sample target;
+dcm2.RST = p\textunderscore{}reset;
+dcm2.CLKIN = m\textunderscore{}clock;
+dcm2.CLKFB = dcm2.CLK0;
+dcm2.PSEN = 0;
+dcm2.PSCLK = 0;
+dcm2.PSINCDEC =0;
+buff.I = dcm2.CLKDV;
+target.m\textunderscore{}clock = buff.O;
+target.p\textunderscore{}reset = p\textunderscore{}reset;
+\}
+\end{alltt}
+\end{reviewlist}
+

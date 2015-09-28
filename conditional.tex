@@ -1,0 +1,43 @@
+\chapter{条件付実行文と比較演算}
+\label{chap:conditional}
+
+例題ではif文を用いてレジスタcountの値がある値になったら、対応する動作を行わせています。NSLのif文はC言語と同様に（）の中に示される式が0の時には偽、0以外の時には真として動作条件を判定します。比較のための演算子を示します。これらの演算子は条件が真の時に1ビットの1を返し、偽のときに0を返します。
+
+\begin{table}[h]
+\reviewtablecaption{条件演算子}
+\begin{reviewtable}{|l|l|}
+\hline
+\textgt{==} & 同一値のときに真 \\  \hline
+\textgt{!=} & 異なる値のときに真 \\  \hline
+\textgt{\textgreater{}} & 左の式が右の式より大きいときに真 \\  \hline
+\textgt{\textless{}} & 左の式が右の式より小さいときに真 \\  \hline
+\textgt{\textgreater{}=} & 左の式が右の式以上のときに真 \\  \hline
+\textgt{\textless{}=} & 左の式が右の式以下のときに真 \\  \hline
+\end{reviewtable}
+\end{table}
+
+比較演算とともに、論理演算子を使って複雑な比較をすることができます。論理演算子には、==, \textbar{}\textbar{}, !があります。NSLは、すべての値の評価を並列に行います。この点は、C言語と異なるので、副作用のある関数呼び出記述する場合には、十分、その影響を確認してください。また、C言語と異なり、値を転送する文（C言語では代入文、NSLでは転送文）は値を持たないので、転送を式に含めることはできません。複数の比較を優先順位をつけて評価する必要がある場合には、後述のalt文を利用してください。
+
+C言語と同様に、if文にはelse節をつけることができます。
+
+\begin{reviewemlist}
+\begin{alltt}
+   if(x \textgreater{} 0 \textbar{}\textbar{} x\textless{}=10)    \textunderscore{}display("ok:\%d",x);
+   else                       \textunderscore{}finish("bye");
+\end{alltt}
+\end{reviewemlist}
+
+ifとelseを組み合わせて複雑な動作条件を持つ回路を構成できます。しかし、複雑に入り組んだif文は分かりにくく、バグの温床になります。条件が複雑すぎると思うときには、多くの場合、NSLの持つ多方向分岐書式であるanyとaltを用いることで、見通しのよい回路を作ることができます。
+
+if文は、NSLの条件実行文の特別な形式です。一般形式は、any文もしくはalt文になります。これらの文は、条件 : 実行文の形で、複数の条件に対する多方向分岐処理を行います。また、これらの文には、条件としてelseを指定することもできます。any文は、すべての条件を同時に評価し、条件が真となるすべての文を実行します。alt文は、条件は上位の文から評価され、最初に真となる文だけを実行します。例題の二つのif文と同じ動作をするany文の例を示します。C言語のswitch文と似ていますが、コロン : の左には論理式を記述することに注意してください。また、C言語と異なり、条件に一致した場合には、コロン : の右の1文のみを実行します。複数の動作を行いたい場合には、後述の複合文を使います。
+
+\begin{reviewemlist}
+\begin{alltt}
+   any \{
+       count==100: \textunderscore{}display("Hello World");
+       count==200: \textunderscore{}finish("bye");
+    \}
+\end{alltt}
+\end{reviewemlist}
+
+alt文を記述すると、コンパイルした結果のハードウェア中には、alt文の動作原理に従い、プライオリティエンコーダが生成されます。プライオリティエンコーダはハードウェア性能のボトルネックとなる場合が多いので、altを用いる回路を作成するときに、altが本当に必要なケースであるかを十分吟味してください。また、同じ理由で、elseの利用も性能上の理由から推奨しません。

@@ -1,0 +1,141 @@
+\chapter{階層構造}
+\label{chap:hierarchy}
+
+分割して統治する。これが、大規模なハードウェアの開発の常道です。実用的な規模の回路開発では、必ずと言っていいほど、階層構造が使われます。階層構造の利点は、モジュール性の向上です。モジュール性の高い設計は、開発効率が高いだけでなく、保守性もよくなります。
+
+NSLの回路をモジュールと呼びますが、モジュールは、他モジュールを構成要素として持つことができます。モジュールに読み込んだ他モジュールを、サブモジュールと呼びます。
+
+サブモジュールを構成要素として利用する場合には、その入出力関係を示したdeclare文が、あらかじめ定義されている必要があります。サブモジュールのmodule文自体はなくても、NSLのコンパイルは可能です。もちろん、回路として実現する場合には、全部のモジュールが定義されている必要がありますが、NSLコンパイラは、分割コンパイルのために、declare文をプロトタイプ文として利用しています。
+
+NSLには、もう一つ、構造を抽象化する構成要素として、構造体があります。構造体は、declare文同様、あらかじめ、struct文を用いて、定義されている必要があります。
+
+1. declare文： モジュールの入出力を規定します。また、モジュールの属性に、interfaceとsimulationがあります。前者は、クロック信号を含め、モジュールの、すべての入出力ピンをdeclareで定義することを示し、後者は、このモジュールが論理シミュレーション用であり、実回路には展開しないことを意味します。
+
+\begin{reviewemlist}
+\begin{alltt}
+declare モジュール名 モジュール属性 \{
+  入出力ピン定義
+入来関数定義
+出立関数定義
+\}
+\end{alltt}
+\end{reviewemlist}
+
+モジュール名以外の定義は、対応するものがなければ、省略可能です。
+
+2. struct文： 構造体のビット割り当てを規定します。C言語の構造体と異なり、構造体の宣言に型を指定しません。これは、構造体のビット割り当てをレジスタに使うのか、端子に使うのかはユーザが決めることであり、かつ、同じ構造体を双方に使う場合もあるからです。C言語では、型はメモリ上に占める大きさの情報でしかありませんが、NSLのレジスタと端子は、実体としてまったく異なるものなので、構造体の定義には型を含めないことにしました。構造体名の宣言には、後ろにセミコロンが必要です。現在の言語仕様では、本来、このセミコロンの必要性は、ないのですが、後の拡張のために言語仕様に取り入れています。
+
+\begin{reviewemlist}
+\begin{alltt}
+struct 構造体名 \{
+ メンバー名1[ビット数];
+ メンバー名2[ビット数];
+ .....
+\} ;
+\end{alltt}
+\end{reviewemlist}
+
+モジュールの中で、構成要素として、サブモジュールや構造体を利用する場合には、次のように定義します。
+
+\begin{enumerate}
+\item サブモジュール  : サブモジュールは、サブモジュール名 インスタンス名[多重度] ; と、記述し、多重度は省略可能です。
+\item 構造体 : 構造体は、 構造体名 型 構造体インスタンス名 = 初期値 ; と宣言します。型は、レジスタ型(reg)もしくは端子型(wire)です。レジスタ型では、初期値が設定可能です。初期値の設定は、省略可能です。
+\end{enumerate}
+
+サブモジュールや構造体を用いる例題は、どうしても、多少複雑になってしまいます。例題を注意深く読んでください。tut7は、4ビット全加算器のモジュールfadd4を二つ用いて、8ビットの加算をする例題です。8ビットの信号を、二つの4ビット信号に分解するために、構造体を用いています。
+
+\reviewlistcaption{リスト8.1: tut7}
+\begin{reviewlist}
+\begin{alltt}
+declare tut7 simulation \{\}
+
+declare fadd4 \{
+       input a[4];
+       input b[4];
+       input ci;
+       output q[4];
+       output c;
+       output o;
+       func\textunderscore{}in ex(a,b,ci) : q;
+\}
+
+struct byte\textunderscore{}nibble \{
+       hi[4];
+       lo[4];
+\} ;
+
+module tut7 \{
+       byte\textunderscore{}nibble reg count = 0 ;
+       fadd4 sm[2];
+       count++;
+       if(count\textgreater{}60) \{
+               byte\textunderscore{}nibble wire res;
+               res.lo=sm[0].ex(count.lo,count.lo,0);
+               res.hi=sm[1].ex(count.hi,count.hi,sm[0].c);
+               \textunderscore{}display("count:\%d, res:\%d, ovf:\%d", count, res,sm[1].o);
+       \}
+       if(count==67) \textunderscore{}finish("bye");
+\}
+
+module fadd4 \{
+       func ex \{
+               wire qs[4],qe[2];
+               qs = \{0b0,3'(a)\} + \{0b0,3'(b)\} + 4'(ci);
+               qe = (2'(a[3])+2'(b[3])+2'(qs[3]));
+               c = qe[1];
+               o = qe[1] \textasciicircum{} qs[3];
+               return \{qe[0],3'(qs)\};
+       \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+構造体 byte\textunderscore{}nibbleは、4ビットのデータ二つからなる8ビットの構造体を定義しています。tut7モジュールは、レジスタ型countと端子型resの二つの構造体インスタンスを生成しています。countは0に初期化し、クロックごとに1つずつ加算していきます。加算は、構造体全体（つまり8ビット）に対して行われることに注意してください。countの値が60より大きい場合、二つの全加算器を用いて、加算を実行します。countの値は、構造体のメンバーを用いて、hiとloに分解し、全加算器の呼び出しに用います。下位の4ビットからのキャリーを上位の加算器のキャリー入力にいれ、それぞれの加算器の結果は、端子型構造体resのメンバーに転送します。これらの計算結果と、上位の加算器のオーバーフロー出力を計算結果として表示します。NSLでは、数値を符号なし2進数として扱うので、オーバーフローを起こしても、符合はマイナスには見えません。しかし、8ビットの2の補数表記で考えれば、負の値になっていることが分かると思います。
+
+4ビット全加算器fadd4は、オーバーフローの計算のため、下位3ビットの計算と、MSBの計算を分離しています。キャリーを得るため、MSBの計算を2ビットで行っています。また、キャリーと、3ビット目からの桁上げの排他的論理和をオーバーフローとしています。
+
+それでは、実行してみましょう。ここでは、Windows版NSL COREを用いて、シミュレーション用のVerilogHDLを作成します。LanguageがSimulationとなっていることを確認し、右下のTargetにtu7を記入した上で、tut7.nslをVerilogHDLシミュレーションファイルに変換してください。その後、Icarus Verilogでコンパイル、シミュレーションを行います。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -otut7.vvp tut7.v
+\textgreater{} vvp tut7.vvp
+
+VCD info: dumpfile tut7.vcd opened for output.
+count: 61, res:122, ovf:0
+count: 62, res:124, ovf:0
+count: 63, res:126, ovf:0
+count: 64, res:128, ovf:1
+count: 65, res:130, ovf:1
+count: 66, res:132, ovf:1
+bye
+count: 67, res:134, ovf:1
+\end{alltt}
+\end{reviewcmd}
+
+countの値を2倍した数値がresに返ってきているのが分かります。8ビットの2の補数表記では、127までが正の数で、それ以上の数は負になります。そこで、128以上の結果は、本来の符号と異なる結果を返していることになり、オーバフローとなります。符号なしの演算を行うときには、オーバフローは無視します。countが67になったときには、二つの\textunderscore{}display文が同時に動作するので、シミュレータにより、この二つの順序は変化します。
+
+構造体で宣言した端子やレジスタと同一のビット幅を持つ式の一部を構造体メンバーとして参照したい場合には、キャスト演算により、対象ビットの切り出しができます。
+
+たとえば、
+
+\begin{reviewemlist}
+\begin{alltt}
+struct inst \{
+  op[8];
+  r1[4];
+  r2[4];
+\} ;
+\end{alltt}
+\end{reviewemlist}
+
+と宣言された全16ビットの構造体があります。16ビットのレジスタopregから、構造体のメンバー名を用いてopメンバーの値を取り出したいときには、
+
+\begin{reviewemlist}
+\begin{alltt}
+   workop = (inst)(opreg).op;
+\end{alltt}
+\end{reviewemlist}
+
+と、(構造体名)(式).メンバー名　の形式で式を構造体にキャストしてメンバーの参照ができます。ただし、キャストは転送の左辺には使えないことに注意してください。

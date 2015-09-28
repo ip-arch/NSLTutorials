@@ -1,0 +1,33 @@
+\chapter{プリプロセッサ}
+\label{chap:preprocessor}
+
+NSLは、プリプロセッサディレクティブとして、次のものを用意しました。
+
+\begin{itemize}
+\item マクロ定義
+
+\begin{itemize}
+\item \#define マクロ名 定義値: マクロを定義します。ソースコード中に書かれたマクロ名は、定義した値に変換します。識別子中に、マクロ名を利用する場合、\%\%で囲みます。
+\item \#undef マクロ名:  マクロ定義を取り消します。
+\end{itemize}
+
+\item 条件コンパイル
+
+\begin{itemize}
+\item \#ifdef マクロ名: マクロが定義されている場合、以降\#endifもしくは\#elseまでのソースコードをコンパイルします。
+\item \#ifndef マクロ名: マクロが定義されていない場合、以降\#endifもしくは\#elseまでのソースコードをコンパイルします。
+\item \#if 数値 : 数値が0以外の場合、以降\#endifもしくは\#elseまでのソースコードをコンパイルします。
+\item \#else : \#ifdef/\#ifndefの逆の条件で、以降\#endifまでのソースコードをコンパイルします。
+\item \#endif : 条件コンパイルの停止
+\end{itemize}
+
+\item インクルード
+
+\begin{itemize}
+\item \#include \textless{}ファイル名\textgreater{} : NSL\textunderscore{}INCLUDE環境変数のパスから、ファイル名を検索し、ソースコードとして挿入します。
+\item \#include "ファイル名" : カレントディレクトリもしくは、コンパイル時に指定したパスから、ファイル名を検索し、ソースコードとして挿入します。
+\end{itemize}
+
+\end{itemize}
+
+プリプロセッサである、nslpp.exeの出力は、C言語のプリプロセッサと互換性があります。そこで、さらに高度なマクロを利用したい場合、gccなどをNSLのフロントエンドとして使うこともできます。

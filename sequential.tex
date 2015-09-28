@@ -1,0 +1,255 @@
+\chapter{順序実行、whileとforによる繰り返し処理回路}
+\label{chap:sequential}
+
+関数の処理には、順序実行を行うシーケンスブロックを定義できます。シーケンスブロック内では、記述した実行文を1クロックずつ順次実行します。シーケンスブロックの中で、繰り返し処理を記述するためにwhile文とfor文を用意しました。
+
+シーケンスブロックは、seq \{ 動作文列 \} の形で記述します。動作文列は、複数の動作文を並べたものです。関数内のシーケンスブロックでは、最初の動作文はシーケンスブロックを呼び出したクロックにおいて実行されます。以後の動作文は、基本的に1クロックずつ順次実行されます。動作文の順次実行は、手続き（proc）の呼び出し、for, whileの実行、gotoによる順序制御ができ、このときには、実行順序が変更されます。
+
+次の例題は、内部関数がシーケンスブロックを呼び出し順次実行するモジュールです。レジスタ count を、カウンタとして用いて、この値が100になったところで、内部関数を呼び出し、内部関数のシーケンスブロックにおいてカウンタの値を表示します。
+
+\reviewlistcaption{リスト7.1: tut13}
+\begin{reviewlist}
+\begin{alltt}
+declare tut13 simulation \{ \}
+
+module tut13 \{
+    reg count[8] = 0;
+    wire value[8];
+    func\textunderscore{}self  start(value);
+
+    count++;
+    if(count==100) start(count);
+
+    func start seq \{
+        \textunderscore{}display("Hello World: value = \%d, count = \%d", value, count);
+        \textunderscore{}display("count = \%d", count);
+        \textunderscore{}display("count = \%d", count);
+        \textunderscore{}finish("bye: count = \%d", count);
+    \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+シミュレーションするために、この回路を、NSL COREでコンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut13.nsl -verisim2 -target tut13
+\end{alltt}
+\end{reviewcmd}
+
+この操作で、tut13.vというVerilogHDLのファイルができます。
+次に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut13.vvp tut13.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみ ましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut13.vvp
+VCD info: dumpfile tut13.vcd opened for output.
+Hello World: value = 100, count = 100
+count = 101
+count = 102
+bye: count = 103
+\end{alltt}
+\end{reviewcmd}
+
+内部関数を呼び出したときの引数と、シーケンスブロック内で最初の動作文が表示したcountの値が等しくなっていること、以後の動作文において、countの値が一つずつ増加していることに注目してください。このように、順次、1クロックずつ処理を実行する動作を簡単に記述することができます。
+
+whileは括弧の中の式が0でない間、実行文を1クロックずつ順次実行します。ループの終了判定は実行文の実行に先立って行われます。そこで、ループからの脱出は、終了判定が偽（0）となった後で行われることになります。
+
+\begin{reviewemlist}
+\begin{alltt}
+       while(count\textless{}loop) \{
+            \textunderscore{}display("loop = \%d, count = \%d", loop, count);
+       \}
+\end{alltt}
+\end{reviewemlist}
+
+tut4にwhileを用いた例題を示します。レジスタcountと、仮引数となる端子valueを定義し、さらに制御内部端子startに仮引数の valueを指定して定義します。
+
+\reviewlistcaption{リスト7.2: tut4}
+\begin{reviewlist}
+\begin{alltt}
+declare tut4 simulation \{ \}
+
+module tut4 \{
+   reg count[8] = 0;
+   wire value[8];
+   func\textunderscore{}self  start(value);
+   count++;
+   if(count==100) start(110);
+
+   func start seq \{
+       reg loop[8]=0;
+       loop:=value;
+       while(count\textless{}loop) \{
+            \textunderscore{}display("loop = \%d, count = \%d", loop, count);
+       \}
+       \textunderscore{}finish("bye: count = \%d", count);
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+この回路では、countの値が100になったところで、110を実引数として内部関数startを呼び出します。countの値は、仮引数valueに転送されて、同じクロック中にstartを起動します。startが起動されたときに実行する処理は、funcの実行文として記述します。例題では、シーケンスブロックが起動され、レジスタloopへの転送がstartの起動クロックで実行されます。ついで、countの値がloopより小さい場合に、while文がメッセージ出力を出す\textunderscore{}display文を起動します。countの値がloop以上になるとwhileは終了し、\textunderscore{}finishを実行します。内部関数startの仮引数を、いったん、レジスタに転送しなおしている理由は、端子である仮引数の値は呼び出されたクロックでのみ有効ですが、whileは複数クロックの間実行を行うため、whileの条件はレジスタの値で判定する必要があるからです。
+
+シミュレーションするために、この回路を、NSL COREでコンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut4.nsl -verisim2 -target tut4
+\end{alltt}
+\end{reviewcmd}
+
+この操作で、tut4.vというVerilogHDLのファイルができます。
+
+次に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut4.vvp tut4.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut4.vvp
+
+VCD info: dumpfile tut4.vcd opened for output.
+loop = 110, count = 101
+loop = 110, count = 102
+loop = 110, count = 103
+loop = 110, count = 104
+loop = 110, count = 105
+loop = 110, count = 106
+loop = 110, count = 107
+loop = 110, count = 108
+loop = 110, count = 109
+bye: count = 111
+\end{alltt}
+\end{reviewcmd}
+
+この回路は、並列処理と順序処理が並行して動作しています。countレジスタをカウントアップする処理、if文による条件動作、それと、func文のシーケンスブロックによる順序処理です。func文のstart制御は、if文の実行文によって起動され、その後、seqブロックの動作を1つずつ実行しています。ハードウェアでは、通常、すべての処理が同時に並行して動作するので、プログラム言語と異なり、start制御を呼び出しても、呼び出した元の回路の動作が終了するわけではないことに注意してください。
+
+注意深い方は、最後のcountが111であることに疑問をもたれたかもしれません。この理由は、whileの実現方法にあります。whileの合成は、次のステップで行います。
+
+\begin{enumerate}
+\item 条件式を評価する計算を合成します。式の値が0であれば、whileブロックの次の処理に進むgoto文を合成します。
+\item whileブロック内の処理を順次合成します。最初の処理が、手続き、goto文、ラベルでない場合には、式の評価と最初の文を同時に実行する合成をします。
+\item 条件式の評価に戻るgoto文を合成します。ブロックの最後の文が、、手続き、goto文、ラベルでない場合には、最後の文と式の評価へのgoto文を同時に実行する合成をします。
+\end{enumerate}
+
+例題tut4では、count\textless{}loopが条件式になります。countの値が110になったとき、条件式が偽となり、whileを抜けて、次の文に進みます。次の文の実行（ここでは、\textunderscore{}finish()）は、1クロック後に起動されるため、countの値は111に変化しています。条件式が偽となるまで待つのは、言語仕様であり、これ以上はタイミングを詰められません。
+
+ループ処理を使って、記述をコンパクトにしたいけれど、タイミングをきっちりと詰めたい場合には、次の例題（tut5）に示す数え上げ形のfor文を使ってください。
+
+\reviewlistcaption{リスト7.3: tut5}
+\begin{reviewlist}
+\begin{alltt}
+declare tut5 simulation \{ \}
+
+module tut5 \{
+   reg count[8] = 0;
+   func\textunderscore{}self  start();
+   count++;
+   if(count==100) start();
+
+   func start seq \{
+       reg loop[8];
+       for(loop:=0,9) \{
+            \textunderscore{}display("loop = \%d, count = \%d", loop, count);
+       \}
+       \textunderscore{}finish("bye: count = \%d", count);
+    \}
+ \}
+\end{alltt}
+\end{reviewlist}
+
+
+数え上げ型のfor文は、 レジスタ変数の値を指定した数値の数だけ1ずつ増加もしくは減少させて、ブロック中の文を実行します。変数が最終値に達したところで、ループを終了するため、条件が偽となってからループを終了するwhile文等と異なり、判定のためのクロックが不要になり、1クロック早く次の文が実行可能です。変数の範囲には整数値だけが指定できます。変数範囲をloop:=9,0とすると、9から逆順に数え上げます。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut5.nsl -verisim2 -target tut5
+\textgreater{} iverilog -otut5.vvp tut5.v
+\textgreater{} vvp tut5.vvp
+
+VCD info: dumpfile tut5.vcd opened for output.
+loop =   0, count = 101
+loop =   1, count = 102
+loop =   2, count = 103
+loop =   3, count = 104
+loop =   4, count = 105
+loop =   5, count = 106
+loop =   6, count = 107
+loop =   7, count = 108
+loop =   8, count = 109
+loop =   9, count = 110
+bye: count = 111
+\end{alltt}
+\end{reviewcmd}
+
+for文に関しては、C言語のfor文に慣れている設計者のため、Cと似た形式を用意しています。
+
+\begin{reviewemlist}
+\begin{alltt}
+for(式1; 式2; 式3) \{ 実行文 \}
+\end{alltt}
+\end{reviewemlist}
+
+式1は、ループの開始前に実行し、式2が真の場合、実行文を順次実行し、その後式3のを実行します。式1、式3は、並列ブロックにより、複数の実行文を同時に指定することができます。、ループの評価については、whileと同じく、条件式が偽となってからループを脱出するのですが、式3が、レジスタ++もしくは、レジスタ--の形の場合だけ、条件評価をループの最後において、式3の変更後の値を用いて評価するように合成していますので、典型的な例（tut6）では、whileよりも1クロック早くループの脱出が可能です。
+
+\reviewlistcaption{リスト7.4: tut6}
+\begin{reviewlist}
+\begin{alltt}
+declare tut6 simulation \{ \}
+
+module tut6 \{
+   reg count[8] = 0;
+   wire value[8];
+   func\textunderscore{}self  start(value);
+   count++;
+   if(count==100) start(5);
+
+   func start seq \{
+       reg loop[8]=0,lend[8]=0;
+       for(\{loop:=0;lend:=value;\};loop\textless{}lend; loop++) \{
+           \textunderscore{}display("loop = \%d, count = \%d", loop, count);
+       \}
+       \textunderscore{}finish("bye: count = \%d", count);
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+シミュレーションを実行してみましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut6.nsl -verisim2 -target tut6
+\textgreater{} iverilog -otut6.vvp tut6.v
+\textgreater{} vvp tut6.vvp
+
+VCD info: dumpfile tut6.vcd opened for output.
+loop =   0, count = 101
+loop =   1, count = 102
+loop =   2, count = 103
+loop =   3, count = 104
+loop =   4, count = 105
+bye: count = 106
+\end{alltt}
+\end{reviewcmd}
+
+例題tut6では、内部関数startの引数を用いてループの制御をしています。 内部関数の引数は端子に与えられるため、for文のような複数クロックの動作を行う文で利用する場合には、いったん、レジスタに受けなおす必要があります。この例では、for文の先頭において、ループ変数loopの初期化とともに、レジスタlendへ仮引数valueの値を転送しています。

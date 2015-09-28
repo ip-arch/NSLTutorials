@@ -1,0 +1,106 @@
+\chapter{関数（制御端子）と引数を持つ回路}
+\label{chap:function}
+
+NSLは、ハードウェアの機能を関数として呼び出して実行する文法を持ちます。 NSLでは、関数名を、制御端子として参照できます。通常のデータ信号は、転送されていない場合、ハザード（'bx)が与えられるのに対して、制御端子は、関数が呼び出されたクロックにおいて1となり、呼び出されていない間は0となります。そこで、制御系の信号として、設定されないときに0となる必要がある信号として使うこともできます。モジュール内部に対する制御を行う内部関数（制御内部端子）、モジュール外からの制御を受ける入来関数（制御入力端子）、モジュール外に制御を発行する出立関数（制御出力端子）の3種類があります。それぞれの関数（制御端子）には仮引数と戻り値を定義できます。ソフトウェアと異なり、仮引数と戻り値は、ハードウェアの端子となります。そこで、関数（制御端子）の宣言の前に、あらかじめ仮引数となる端子を宣言しておきます。関数（制御端子）の宣言では関数（制御端子）名と仮引数となる端子名、ならびに必要ならば戻り値を返す端子名を示します。（仮引数と戻り値は省略可能です。）
+
+自モジュールが出力する出立関数では、処理は外部のモジュールで行うため、モジュール内に動作の記述は行いません。ただし、サブモジュールの出立関数の動作を親モジュールに記述することはできます。
+
+\begin{itemize}
+\item 内部関数定義
+\end{itemize}
+
+\begin{reviewemlist}
+\begin{alltt}
+func\textunderscore{}self 関数名(引数内部端子リスト)  : 返り値端子 ;
+\end{alltt}
+\end{reviewemlist}
+
+\begin{itemize}
+\item 入来関数定義
+\end{itemize}
+
+\begin{reviewemlist}
+\begin{alltt}
+func\textunderscore{}in 関数名(引数入力端子リスト)  : 返り値出力端子 ;
+\end{alltt}
+\end{reviewemlist}
+
+\begin{itemize}
+\item 出立関数定義
+\end{itemize}
+
+\begin{reviewemlist}
+\begin{alltt}
+func\textunderscore{}out 関数名(引数出力端子リスト)  : 返り値入力端子 ;
+\end{alltt}
+\end{reviewemlist}
+
+関数が呼び出されたときの動作は、func文に記述します。
+
+\begin{reviewemlist}
+\begin{alltt}
+func 関数名 動作
+\end{alltt}
+\end{reviewemlist}
+
+関数の動作には、実行文として許されている文法がすべて記述できます。関数の値は、関数を呼び出したクロック中だけ有効です。
+
+複合文である、seq文は、関数の実行文としてのみ記述可能で、順次ステップ実行します。seq文が動作を継続している場合でも、関数（制御端子）自体は、起動されたクロックだけ有効であり、関数の戻り値を利用する場合には、起動クロック以外の値を受け取れないことに注意が必要です。複数クロックで処理を行った演算結果を利用する場合、演算結果をレジスタに記憶し、その値を読み出す関数を別途作成してください。（演算終了状態を返す関数もあわせて作成しておくと便利です。）
+
+\begin{reviewemlist}
+\begin{alltt}
+input a,b;
+output ret;
+func\textunderscore{}in  do\textunderscore{}calc(a,b);
+func\textunderscore{}in  get\textunderscore{}value(): ret;
+\end{alltt}
+\end{reviewemlist}
+
+次の例題は、内部関数を用いた論理回路です。この回路をtut3.nslという名前のテキストファイルとして用意してください。
+
+\reviewlistcaption{リスト6.1: tut3}
+\begin{reviewlist}
+\begin{alltt}
+declare tut3 simulation \{ \}
+
+module tut3 \{
+   wire value[8], ret[8];
+   func\textunderscore{}self  start(value) : ret;
+   if(\textunderscore{}time\textgreater{}=100) \textunderscore{}finish("Value = \%d",start(1));
+   func start \{
+       return ( value + 3 );
+   \}
+\}
+\end{alltt}
+\end{reviewlist}
+
+
+\textunderscore{}timeは、シミュレーション時間を値として持つ組込み変数です。シミュレーション時間はクロックの立ち上がりと立下りの両方でカウントされるので、クロックの立ち上がりで動作する論理回路の時間と、必ずしも、一致するものではないことに注意してください。（比較演算子==で、\textunderscore{}timeの一致判定をすると、一致しない可能性があります。）
+
+シミュレーションするために、この回路を、NSL COREでコンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} nsl2vl tut3.nsl -verisim2 -target tut3
+\end{alltt}
+\end{reviewcmd}
+
+この操作で、tut3.vというVerilogHDLのファイルができます。
+次に、Icarus Verilogで、コンパイルします。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} iverilog -o tut3.vvp tut3.v
+\end{alltt}
+\end{reviewcmd}
+
+それでは、実行してみ ましょう。
+
+\begin{reviewcmd}
+\begin{alltt}
+\textgreater{} vvp tut3.vvp
+
+VCD info: dumpfile tut3.vcd opened for output.
+Value = 4
+\end{alltt}
+\end{reviewcmd}
