@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=shift_jis">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+<title>any block</title>
+<style>
+</style>
+
+</head>
+
+<body lang=JA style='text-justify-trim:punctuation'>
+
+<div class=Section1>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span lang=EN-US
+style='font-size:18.0pt;font-family:"Arial"'>any block</span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>NSL uses 'any' block syntax
+for conditional behavior activation. The 'any' bock does not have priority. All
+the behavior which matches the condition will be activated in parallel. The
+syntax of 'any' block is:</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><b><span lang=EN-US style='font-family:"Arial"'>&nbsp; any
+{</span></b></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><b><span lang=EN-US style='font-family:"Arial"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></b><i><span lang=EN-US style='font-family:"Arial"'>condition1</span></i><b><span
+lang=EN-US style='font-family:"Arial"'>: </span></b><i><span lang=EN-US
+style='font-family:"Arial"'>behavior description 1</span></i></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><i><span lang=EN-US style='font-family:"Arial"'>&nbsp;&nbsp;&nbsp;&nbsp;
+condition2</span></i><b><span lang=EN-US style='font-family:"Arial"'>: </span></b><i><span
+lang=EN-US style='font-family:"Arial"'>behavior description 2</span></i></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><i><span lang=EN-US style='font-family:"Arial"'>&nbsp;&nbsp;&nbsp;
+.... as may description as you like ....</span></i></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><i><span lang=EN-US style='font-family:"Arial"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></i><b><span lang=EN-US style='font-family:"Arial"'>else: </span></b><i><span
+lang=EN-US style='font-family:"Arial"'>behavior description for
+otherwise</span></i></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><b><span lang=EN-US style='font-family:"Arial"'>&nbsp;&nbsp;
+}</span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>The 'else' condition is
+optional.</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><b><span
+lang=EN-US style='font-family:"Times New Roman"'>Example-NS07</span></b></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><b><span lang=EN-US style='font-family:"Arial"'>
+<xmp>
+declare NS07 {
+  input a,b;
+  input c,d;
+  output f;
+}
+
+module NS07 {
+  any {
+     c: f = a & b;
+     d: f = a ^ b;
+   }
+}
+</xmp>
+</span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>This example uses IO
+definitions and core behavior description. Two behavioral operations will be
+activated conditionally in the core behavior description.</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>It is an easy operation and
+you may image the result. We will make a simulation on this circuitry as
+following command:</span></p>
+
+<p class=MsoNormal style='margin-left:12.0pt;text-align:justify;text-justify:
+inter-ideograph'><b><span lang=EN-US style='font-family:"Arial"'># ./exe
+NS07</span></b></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>The result will be available
+on your console.</span></p>
+
+<p class=MsoNormal style='text-align:justify;text-justify:inter-ideograph'><span
+lang=EN-US style='font-family:"Times New Roman"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-family:"Arial"'>
+<xmp>
+a:0, b:0, c:0, d:0, f:x
+a:1, b:0, c:0, d:0, f:x
+a:0, b:1, c:0, d:0, f:x
+a:1, b:1, c:0, d:0, f:x
+a:0, b:0, c:1, d:0, f:0
+a:1, b:0, c:1, d:0, f:0
+a:0, b:1, c:1, d:0, f:0
+a:1, b:1, c:1, d:0, f:1
+a:0, b:0, c:0, d:1, f:0
+a:1, b:0, c:0, d:1, f:1
+a:0, b:1, c:0, d:1, f:1
+a:1, b:1, c:0, d:1, f:0
+a:0, b:0, c:1, d:1, f:x
+a:1, b:0, c:1, d:1, f:x
+a:0, b:1, c:1, d:1, f:x
+a:1, b:1, c:1, d:1, f:x</xmp>
+</span></b></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+</div>
+<a href="kiso1-2.4.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.6.html">NEXT</a>
+
+</body>
+
+</html>

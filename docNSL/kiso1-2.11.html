@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Register</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;14094685">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Register</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+uses registers to hold data signals. Registers will hold on the
+rising edge of a clock signal (m_clock).  We can refer and transfer
+value to registers but referenced value will be the data on last
+clock period.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS14</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS14 {
+  input a,b;
+  output f;
+}
+
+module NS14 {
+	reg r;
+	r := a & b;
+	f = r;
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS14</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a:0, b:0, r:x, f:x
+a:1, b:0, r:0, f:0
+a:0, b:1, r:0, f:0
+a:1, b:1, r:0, f:0
+a:0, b:0, r:1, f:1
+a:1, b:0, r:0, f:0
+a:0, b:1, r:0, f:0
+a:1, b:1, r:0, f:0
+a:0, b:0, r:1, f:1
+</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+can see the wave form of  this simulation as:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS14</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P><IMG SRC="NS14.png" NAME="NS14" ALIGN=LEFT WIDTH=787 HEIGHT=400 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<a href="kiso1-2.10.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.12.html">NEXT</a>
+</BODY>
+</HTML>

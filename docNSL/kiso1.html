@@ -1,0 +1,956 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=shift_jis">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="kiso1.files/filelist.xml">
+<link rel=Edit-Time-Data href="kiso1.files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>NSL Tutorial: Basic structure of NSL</title>
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;
+	mso-font-alt:"MS Mincho";
+	mso-font-charset:128;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-536870145 1791491579 18 0 131231 0;}
+@font-face
+	{font-family:"MS PGothic";
+	panose-1:2 11 6 0 7 2 5 8 2 4;
+	mso-font-charset:128;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1791491579 18 0 131231 0;}
+@font-face
+	{font-family:"\@MS PGothic";
+	panose-1:2 11 6 0 7 2 5 8 2 4;
+	mso-font-charset:128;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1791491579 18 0 131231 0;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;
+	mso-font-charset:128;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:-536870145 1791491579 18 0 131231 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"MS PGothic";
+	mso-bidi-font-family:"MS PGothic";
+	color:black;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"MS PGothic";
+	mso-bidi-font-family:"MS PGothic";
+	color:black;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:\6A19\6E96\306E\8868;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+<meta name=AUTHOR content="Naohiko Shimizu">
+<meta name=CREATED content="20100504;17365369">
+<meta name=CHANGEDBY content="Naohiko Shimizu">
+<meta name=CHANGED content="20100504;15173100">
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3074"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p align=center style='text-align:center'><b><span style='font-size:20.0pt;
+font-family:"Times New Roman"'>NSL Tutorial: Basic structure of NSL</span></b></p>
+
+<p><span style='font-family:"Times New Roman"'>NSL describes the logic circuit
+as set of modules. The structure of a module is shown as following. Each
+definitions and/or descriptions can be eliminate but the order of the
+definitions should not be altered.</span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-size:13.0pt;font-family:
+Arial'>declare</span></b><span style='font-family:"Times New Roman"'> </span><i><span
+style='font-size:13.0pt;font-family:Arial'>module_name</span></i><span
+style='font-family:"Times New Roman"'> </span><b><span style='font-size:13.0pt;
+font-family:Arial'>{</span></b></p>
+
+<p style='margin-left:56.7pt'><i><span style='font-size:13.0pt;font-family:
+Arial'>io_facility_defenitions</span></i></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-size:13.0pt;font-family:
+Arial'>}</span></b></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-size:13.0pt;font-family:
+Arial'>module</span></b><span style='font-family:"Times New Roman"'> </span><i><span
+style='font-size:13.0pt;font-family:Arial'>module_name</span></i><span
+style='font-family:"Times New Roman"'> </span><b><span style='font-size:13.0pt;
+font-family:Arial'>{</span></b></p>
+
+<p style='margin-left:56.7pt'><i><span style='font-size:13.0pt;font-family:
+Arial'>internal_facility_defenitions</span></i></p>
+
+<p style='margin-left:56.7pt'><i><span style='font-size:13.0pt;font-family:
+Arial'>core_behavior</span></i></p>
+
+<p style='margin-left:56.7pt'><i><span style='font-size:13.0pt;font-family:
+Arial'>control_behavior</span></i></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-size:13.0pt;font-family:
+Arial'>}</span></b></p>
+
+<p><span style='font-family:"Times New Roman"'>Input and output of modules use
+external terminals:</span><o:p></o:p></p>
+
+<table class=MsoNormalTable border=1 cellspacing=3 cellpadding=0 width=958
+ style='width:718.5pt;mso-cellspacing:2.2pt;mso-padding-alt:0in 0in 0in 0in'>
+ <COL WIDTH=308><COL WIDTH=308><COL WIDTH=304>
+ <thead>
+  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+   <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Direction</span></b></p>
+   </td>
+   <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Terminal
+   definitoin command</span></b></p>
+   </td>
+   <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Description</span></b></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style='mso-yfti-irow:1'>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Input</span></p>
+  </td>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-size:13.0pt;font-family:Arial'>input</span></b></p>
+  </td>
+  <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Data input terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Output</span></p>
+  </td>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-size:13.0pt;font-family:Arial'>output</span></b></p>
+  </td>
+  <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Dta output terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3'>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bi-directional</span></p>
+  </td>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-size:13.0pt;font-family:Arial'>inout</span></b></p>
+  </td>
+  <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Data bi-directional terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:4'>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Input</span></p>
+  </td>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-size:13.0pt;font-family:Arial'>func_in</span></b></p>
+  </td>
+  <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Control input terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:5;mso-yfti-lastrow:yes'>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Output</span></p>
+  </td>
+  <td width=308 valign=top style='width:231.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-size:13.0pt;font-family:Arial'>func_out</span></b></p>
+  </td>
+  <td width=304 valign=top style='width:228.0pt;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Control output terminal</span></p>
+  </td>
+ </tr>
+</table>
+
+<p style='margin-bottom:11.9pt'>&nbsp;</p>
+
+<p><span style='font-family:"Times New Roman"'>NSL has following facilities:</span><o:p></o:p></p>
+
+<table class=MsoNormalTable border=1 cellspacing=3 cellpadding=0 width="100%"
+ style='width:100.0%;mso-cellspacing:2.2pt;mso-padding-alt:0in 0in 0in 0in'>
+ <COL WIDTH=80*><COL WIDTH=176*>
+ <thead>
+  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+   <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Facility
+   definition</span></b></p>
+   </td>
+   <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Description</span></b></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style='mso-yfti-irow:1'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>wire</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Internal data terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>reg</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Register</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>mem</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>memory</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:4'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><i><span
+  style='font-family:Arial'>submodule_name</span></i></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Submodule instance definition</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:5'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>func_self</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Control internal terminal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:6'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>proc_name</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Procedure name declaration</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:7'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>state_name</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>State name declaration</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:8'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>func</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Function behavior</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:9'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>proc</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Procedure behavior</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:10;mso-yfti-lastrow:yes'>
+  <td width="31%" valign=top style='width:31.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>state</span></b></p>
+  </td>
+  <td width="69%" valign=top style='width:69.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>State behavior</span></p>
+  </td>
+ </tr>
+</table>
+
+<p style='margin-bottom:11.9pt'>&nbsp;</p>
+
+<p><span style='font-family:"Times New Roman"'>NSL has following behavioral
+definitions:</span><o:p></o:p></p>
+
+<table class=MsoNormalTable border=1 cellspacing=3 cellpadding=0 width="100%"
+ style='width:100.0%;mso-cellspacing:2.2pt;mso-padding-alt:0in 0in 0in 0in'>
+ <COL WIDTH=59*><COL WIDTH=197*>
+ <thead>
+  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+   <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Operation</span></b></p>
+   </td>
+   <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Description</span></b></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style='mso-yfti-irow:1'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Unit operation</span></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Transfer a value to terminal, write to
+  register, write to memory, state transition, activate control terminal,
+  procedure call</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>{ &nbsp; }</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Parallel activation of unit oprations.</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>seq</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Sequential activation of unit
+  oprations.</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:4'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>&nbsp;&nbsp;&nbsp;for</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Loop control. Only valid within seq
+  block</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:5'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>&nbsp;&nbsp;&nbsp;while</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Loop control. Only valid within seq
+  block</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:6'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>&nbsp;&nbsp;&nbsp;goto</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Execution control. Only valid within
+  seq block</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:7'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>alt</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Conditional activation of unit
+  operations with priority.</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:8'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>any</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Conditional activation of unit
+  operations without priority. (All of the matched operation will be activated
+  in parallel)</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:9;mso-yfti-lastrow:yes'>
+  <td width="23%" valign=top style='width:23.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><b><span
+  style='font-family:Arial'>if</span></b></p>
+  </td>
+  <td width="77%" valign=top style='width:77.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Conditional activation of a unit
+  operation.</span></p>
+  </td>
+ </tr>
+</table>
+
+<p style='margin-bottom:11.9pt'>&nbsp;</p>
+
+<p><span style='font-family:"Times New Roman"'>NSL operators:</span><o:p></o:p></p>
+
+<table class=MsoNormalTable border=1 cellspacing=3 cellpadding=0 width="100%"
+ style='width:100.0%;mso-cellspacing:2.2pt;mso-padding-alt:0in 0in 0in 0in'>
+ <COL WIDTH=38*><COL WIDTH=90*><COL WIDTH=36*><COL WIDTH=92*>
+ <thead>
+  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+   <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Operator</span></b></p>
+   </td>
+   <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Description</span></b></p>
+   </td>
+   <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Operator</span></b></p>
+   </td>
+   <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+   <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+   auto;text-align:center'><b><span style='font-family:"Times New Roman"'>Description</span></b></p>
+   </td>
+  </tr>
+ </thead>
+ <tr style='mso-yfti-irow:1'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>~</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Nagate</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>|</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>OR</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:2'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><i><span style='font-family:Arial'>signal</span></i><b><span
+  style='font-family:Arial'>[</span></b><i><span style='font-family:Arial'>n</span></i><b><span
+  style='font-family:Arial'>]</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bit extraction</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>^</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>EXOR</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:3'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><i><span style='font-family:Arial'>signal</span></i><b><span
+  style='font-family:Arial'>[</span></b><i><span style='font-family:Arial'>n</span></i><b><span
+  style='font-family:Arial'>:</span></b><i><span style='font-family:Arial'>m</span></i><b><span
+  style='font-family:Arial'>]</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bits extraction</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&amp;</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>AND</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:4'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>|</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bitwise OR</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>{</span></b><i><span
+  style='font-family:Arial'>signal</span></i><span style='font-family:Arial'>&nbsp;<b>,</b>&nbsp;<i>signal</i><b>}</b></span></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bit concatination</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:5'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&amp;</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bitwise AND</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>+</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Add</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:6'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>^</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Bitwise EXOR</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>-</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Subtract</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:7'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><i><span style='font-family:Arial'>n</span></i><b><span
+  style='font-family:Arial'>#(</span></b><i><span style='font-family:Arial'>signal_name</span></i><b><span
+  style='font-family:Arial'>)</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Sign extention</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><i>n</i><b>'(</b><i>signal_name</i><b>)</b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'>unsgined
+  extention</p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:8'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>==</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Equal</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>!=</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Not equal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:9'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&lt;=</span></b></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Less equal</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&gt;=</span></b></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Greater equal</span></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:10;mso-yfti-lastrow:yes'>
+  <td width="15%" valign=top style='width:15.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&lt;</span></b><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width="36%" valign=top style='width:36.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Less than</span></p>
+  </td>
+  <td width="14%" valign=top style='width:14.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal align=center style='mso-margin-top-alt:auto;mso-margin-bottom-alt:
+  auto;text-align:center'><b><span style='font-family:Arial'>&gt;</span></b><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width="35%" valign=top style='width:35.0%;padding:0in 0in 0in 0in'>
+  <p class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto'><span
+  style='font-family:"Times New Roman"'>Greater than</span></p>
+  </td>
+ </tr>
+</table>
+
+<p style='margin-bottom:11.9pt'>&nbsp;</p>
+
+<p><span style='font-family:"Times New Roman"'>NSL provide bit operators and
+you can make bit twisting logic as Example-nsb0.</span></p>
+
+<p><b><span style='font-family:"Times New Roman"'>Example-nsb0</span></b><span
+style='font-family:"Times New Roman"'> data transfer with registers and wires.</span></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'>declare
+nsb0 {<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>input a[8];<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>output f[8], g[8];<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'>}<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'>module
+nsb0 {<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>wire b[8];<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>reg<span
+style='mso-spacerun:yes'>&nbsp; </span>r[8];<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>b = a;<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>r := a;<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>f = b;<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp;&nbsp; </span>g = r;<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><span
+style='mso-spacerun:yes'>&nbsp; </span>}<o:p></o:p></span></b></p>
+
+<p style='margin-left:1.0in'><span style='font-family:"Times New Roman";
+mso-bidi-font-weight:bold'>The registers will sample the input data at the
+rising edge of the master clock which is usually <b>m_clock</b> in NSL.<o:p></o:p></span></p>
+
+<p style='margin-left:1.0in'><span style='font-family:"Times New Roman";
+mso-bidi-font-weight:bold'>The behavior of this circuit is shows on the
+following figure.<o:p></o:p></span></p>
+
+<p style='margin-left:1.0in'><b><span style='font-family:"Times New Roman"'><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:506.25pt;
+ height:318pt'>
+ <v:imagedata src="kiso1.files/image001.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=675 height=424
+src="kiso1.files/image002.jpg" v:shapes="_x0000_i1025"><![endif]><o:p></o:p></span></b></p>
+
+<p><span style='font-family:"Times New Roman";mso-bidi-font-weight:bold'>The
+corresponding circuit diagram is like the following picture.<o:p></o:p></span></p>
+
+<p><span style='font-family:"Times New Roman";mso-bidi-font-weight:bold'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1026" type="#_x0000_t75" style='width:518.25pt;height:8in'>
+ <v:imagedata src="kiso1.files/image003.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=691 height=768
+src="kiso1.files/image004.jpg" v:shapes="_x0000_i1026"><![endif]><o:p></o:p></span></p>
+
+<p><span style='font-family:"Times New Roman";mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+
+<p><span style='font-family:"Times New Roman";mso-bidi-font-weight:bold'><o:p>&nbsp;</o:p></span></p>
+
+<p><span style='font-family:"Times New Roman"'>The usage of sign extension
+operator is shown in Example-NS01.</span></p>
+
+<p><b><span style='font-family:"Times New Roman"'>Example-NS01</span></b><span
+style='font-family:"Times New Roman"'> Sign extension.</span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>declare
+NS01 {</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>input
+a[4];</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>output
+f[8];</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>}</span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>module
+NS01 {</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>f=8#(a);</span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>} <o:p></o:p></span></b></p>
+
+<p style='margin-left:56.7pt'><span style='font-family:"Times New Roman"'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1028" type="#_x0000_t75" style='width:447.75pt;height:322.5pt'>
+ <v:imagedata src="kiso1.files/image005.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=597 height=430
+src="kiso1.files/image006.jpg" v:shapes="_x0000_i1028"><![endif]><o:p></o:p></span></p>
+
+<p><span style='font-family:"Times New Roman"'>If you need to adjust bit width
+without sign extension, then use concatination as Example-NS02.<o:p></o:p></span></p>
+
+<p><b><span style='font-family:"Times New Roman"'>Example-NS02</span></b><span
+style='font-family:"Times New Roman"'> Bit extentsion without sign extension<o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>declare
+NS02 {</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>input
+a[4];</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>output
+f[8];</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>}</span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>module
+NS02 {</span></b><span style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:85.05pt'><b><span style='font-family:"Times New Roman"'>f=8'(a);</span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:56.7pt'><b><span style='font-family:"Times New Roman"'>} </span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-bottom:12.0pt'><span style='font-family:"Times New Roman"'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1027" type="#_x0000_t75" style='width:412.5pt;height:297pt'>
+ <v:imagedata src="kiso1.files/image007.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=550 height=396
+src="kiso1.files/image008.jpg" v:shapes="_x0000_i1027"><![endif]><o:p></o:p></span></p>
+
+<p style='margin-bottom:11.9pt'><span style='font-family:"Times New Roman"'>Now
+we will start the tutorial exercises. Open a terminal window. Then we need to
+change current directory before starting the tutorials:<o:p></o:p></span></p>
+
+<p style='margin-top:5.1pt;margin-right:0in;margin-bottom:11.9pt;margin-left:
+11.9pt'><b><span style='font-family:Arial'># cd; cd NSL-1</span></b><span
+style='font-family:"Times New Roman"'><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>1.
+<a href="kiso1-2.1.html">Core behavior description</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>2.
+<a href="kiso1-2.2.html">Group signals</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>3.
+<a href="kiso1-2.3.html">parallel execution</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>4.
+<a href="kiso1-2.4.html">alt block</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>5.
+<a href="kiso1-2.5.html">any block</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>6.
+<a href="kiso1-2.51.html">seq block</a></span><u><span style='font-family:"Times New Roman";
+color:blue'><o:p></o:p></span></u></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>7.
+<a href="kiso1-2.6.html">Data internal terminal</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>8.
+<a href="kiso1-2.7.html">Control internal terminal</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>9.
+<a href="kiso1-2.8.html">Control input terminal</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>10.
+<a href="kiso1-2.9.html">Submodules</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>11.
+<a href="kiso1-2.10.html">Control output terminal</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>12.
+<a href="kiso1-2.11.html">Register</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>13.
+<a href="kiso1-2.12.html">Memory</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>14.
+<a href="kiso1-2.13.html">Procedure</a><o:p></o:p></span></p>
+
+<p style='margin-left:.5in;text-indent:-18.15pt'><span style='font-family:"Times New Roman"'>15.
+<a href="kiso1-2.14.html">State Transision</a><o:p></o:p></span></p>
+
+<p style='margin-bottom:12.0pt'><span style='font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+
+<p style='margin-bottom:12.0pt'><span style='font-family:"Times New Roman"'><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

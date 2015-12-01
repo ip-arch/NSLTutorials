@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Control Input Terminal</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;11193153">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Control
+Input Terminals</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><SPAN LANG="en-US"><FONT FACE="Times New Roman">NSL
+uses control input terminals to recieve control message from other
+modules. Control input terminals are declared with 'func_in'. We can
+refer and invoke associate behavior with the terminal.</FONT></SPAN></SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Times New Roman">Example-NS10</FONT></SPAN></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS10 {
+  input a,b;
+  output f;
+  func_in exec_and();
+  func_in exec_or();
+  func_in exec_xor();
+}
+
+module NS10 {
+  func exec_and {
+	f = a & b;
+  }
+  func exec_or {
+	f = a | b;
+  }
+  func exec_xor {
+	f = a ^ b;
+  }
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS10</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"> <FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+AND: a:0, b:0, f:0
+AND: a:0, b:1, f:0
+AND: a:1, b:0, f:0
+AND: a:1, b:1, f:1
+ OR: a:0, b:0, f:0
+ OR: a:0, b:1, f:1
+ OR: a:1, b:0, f:1
+ OR: a:1, b:1, f:1
+XOR: a:0, b:0, f:0
+XOR: a:0, b:1, f:1
+XOR: a:1, b:0, f:1
+XOR: a:1, b:1, f:0</xmp>
+</B></SPAN></FONT></P>
+<P STYLE="font-weight: medium"><FONT FACE="Times New Roman"><SPAN LANG="en-US">A
+control input terminal is a single bit signal, but associated
+behavior can operate on any width data as following example.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Times New Roman">Example-NS11</FONT></SPAN></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS11 {
+  input a[8],b[8];
+  output f[8];
+  func_in exec_add(a,b);
+}
+
+module NS11 {
+  func exec_add {
+	f = a + b;
+  }
+}
+</xmp>
+</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS11</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a:129, b: 36, f:165
+a: 99, b:  9, f:108
+a:141, b: 13, f:154
+a: 18, b:101, f:119
+</xmp></B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<a href="kiso1-2.7.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.9.html">NEXT</a>
+</BODY>
+</HTML>

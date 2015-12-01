@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;15341440">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040614;15345928">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		P { color: #000000 }
+		A:link { color: #0000ff }
+		A:visited { color: #800080 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" LINK="#0000ff" VLINK="#800080" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Times New Roman, serif"><FONT SIZE=5><SPAN LANG="en-US"><B>Core
+Behavior Description</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+module may have a core behavior description. The core behavior works
+continuously without activation.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS03</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS03 {
+  input a,b;
+  output f;
+}
+
+module NS03 {
+  f = a & b;
+}
+</xmp>
+</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">This
+example uses IO definitions and core behavior description. It
+operates logic functions between input terminals and then transfers
+the result to an output terminal. The core behavior description in
+this example is:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>f
+= a &amp; b</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">It
+is an easy operation and you may image the result. We will make a
+simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS03</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>a:0,
+b:0, f:0</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>a:1,
+b:0, f:0</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>a:0,
+b:1, f:0</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>a:1,
+b:1, f:1</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">You
+can show the waveform style output with following command.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS03</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><A NAME="_x0000_i1033"></A><IMG SRC="NS03.png" NAME="NS03" ALIGN=BOTTOM WIDTH=700 HEIGHT=400 BORDER=0></P>
+
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.2.html">NEXT</a>
+
+</BODY>
+</HTML>

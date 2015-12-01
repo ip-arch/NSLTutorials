@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Procedure</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;14502467">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Procedure</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">In
+NSL, sequential logic will be described with procedure and/or seq block. Procedure is
+a basic stracture of a sequential logic and it is also a control signal
+to invoke the procedure. A procedure will be invoked from combinational logic or
+transfered the control from other procedure. It will be terminated with 'finish' or transfer control to
+other procedure.  
+The transfer
+will terminate the current procedure and invoke a new one. Also 'finish()' will
+terminate the current procedure. To terminate a procedure from outside of it, you must use explicit
+procedure name like  <I>proc1.finish();</I>.
+If you don't want to transfer control to the target procedure but simply want to invoke it,
+you can use <I>invoke</I> extension for it, like: <I>proc2.invoke();</I>.
+They will have arguments which consist of registers.
+</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS16</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS16 {
+  input a[4];
+  output f[4];
+  func_in do(a);
+}
+
+module NS16 {
+  reg r1[4],r2[4],r3[4];
+
+  proc_name p1(r1);
+  proc_name p2(r2);
+  proc_name p3(r3);
+
+  func do {
+	p1(a);
+  }
+
+  proc p1 {
+       p2(r1);
+  }
+  proc p2 {
+       p3(r2);
+  }
+  proc p3 {
+       f = r3;
+       finish;
+  }
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS16</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><FONT FACE="Times New Roman">The
+result will be available on your console.</FONT></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm; font-weight: medium"><BR><BR>
+</P>
+<IMG SRC="NS16.png" NAME="NS16" ALIGN=LEFT WIDTH=758 HEIGHT=440 BORDER=0><BR CLEAR=LEFT>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm; font-weight: medium"><BR><BR>
+</P>
+</P>
+<a href="kiso1-2.12.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.14.html">NEXT</a>
+</BODY>
+</HTML>

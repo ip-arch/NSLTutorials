@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>alt block</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;15373492">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040614;15392494">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT SIZE=5><FONT FACE="Arial">alt</FONT></FONT></B>
+<B><FONT SIZE=5><FONT FACE="Arial">block</FONT></FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+uses 'alt' block syntax for conditional behavior activation. The
+'alt' bock has priority; higher priority for upper description. The
+syntax of 'alt' block is:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"> <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">alt
+{</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm">     <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><FONT FACE="Arial"><I>condition1</I><B>:
+</B><I>behavior description 1</I></FONT></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm">     <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><FONT FACE="Arial"><I>condition2</I><B>:
+</B><I>behavior description 2</I></FONT></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm">    <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><I><FONT FACE="Arial">....
+as may description as you like ....</FONT></I></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm">     <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><FONT FACE="Arial"><B>else:
+</B><I>behavior description for otherwise</I></FONT></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"> <FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">}</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+'else' condition is optional.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Times New Roman">Example-NS06</FONT></SPAN></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">
+<xmp>
+declare NS06 {
+  input a,b;
+  input c,d;
+  output f;
+}
+module NS06 {
+  alt {
+     c: f = a & b;
+     d: f = a ^ b;
+   }
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">This
+example uses IO definitions and core behavior description. Two
+behavioral operations will be activated conditionally in the core
+behavior description.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">It
+is an easy operation and you may image the result. We will make a
+simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">#
+./exe NS06</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><xmp>
+a:0, b:0, c:0, d:0, f:x
+a:1, b:0, c:0, d:0, f:x
+a:0, b:1, c:0, d:0, f:x
+a:1, b:1, c:0, d:0, f:x
+a:0, b:0, c:1, d:0, f:0
+a:1, b:0, c:1, d:0, f:0
+a:0, b:1, c:1, d:0, f:0
+a:1, b:1, c:1, d:0, f:1
+a:0, b:0, c:0, d:1, f:0
+a:1, b:0, c:0, d:1, f:1
+a:0, b:1, c:0, d:1, f:1
+a:1, b:1, c:0, d:1, f:0
+a:0, b:0, c:1, d:1, f:0
+a:1, b:0, c:1, d:1, f:0
+a:0, b:1, c:1, d:1, f:0
+a:1, b:1, c:1, d:1, f:1
+</xmp>
+</p>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<a href="kiso1-2.3.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.5.html">NEXT</a>
+</BODY>
+</HTML>

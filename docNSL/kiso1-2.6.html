@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Data Internal Terminal</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040614;14562085">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Data
+Internal Terminals</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+uses data internal terminals for temporary data signals. Data
+internal terminals are declared with 'wire'. We can refer and transfer
+value to the terminal as input or output terminals.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS08</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">
+<xmp>
+declare NS08 {
+	input a,b;
+	output f;
+}
+
+module NS08 {
+	wire c,d;
+	c = a & ~b;
+	d = ~a & b;
+	f = c | d;
+}
+</xmp>
+</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS08</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a:0, b:0, c:0, d:0, f:0
+a:1, b:0, c:1, d:0, f:1
+a:0, b:1, c:0, d:1, f:1
+a:1, b:1, c:0, d:0, f:0
+</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<a href="kiso1-2.5.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.7.html">NEXT</a>
+</BODY>
+</HTML>

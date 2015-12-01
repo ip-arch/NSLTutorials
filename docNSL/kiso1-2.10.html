@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Control Output Terminal</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;13590949">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Control
+Output Terminals</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">A
+module may send message to other and/or upper modules. In this case,
+NSL uses control output terminals. Control output terminals are
+declared with 'func_out'.  Upper module will use 'func' to
+describe the associated behavior.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS13</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare sub {
+  input a[4],b[4];
+  output f[4];
+  func_in do(a,b);
+  func_out done(f);
+}
+
+module sub {
+  func do {
+	done(a&b);
+  }
+}
+
+declare NS13 {
+  input a[4],b[4];
+  output f[4];
+  func_in do(a,b);
+}
+
+module NS13 {
+
+  sub sub1;
+
+  func do  {
+	sub1.do(a,b);
+  }
+
+  func sub1.done {
+	f=sub1.f;
+  }
+}
+</xmp>
+</B></SPAN></FONT></P>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS13</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a:0001, b:0100, f:0000
+a:0011, b:1001, f:0001
+a:1101, b:1101, f:1101
+a:0010, b:0101, f:0000</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<a href="kiso1-2.9.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.11.html">NEXT</a>
+</BODY>
+</HTML>

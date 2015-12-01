@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Group Signals</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;15314370">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040614;15332416">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		P { color: #000000 }
+		A:link { color: #0000ff }
+		A:visited { color: #800080 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" LINK="#0000ff" VLINK="#800080" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Group
+Signals</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+can use a set of signals as a group. </SPAN></FONT>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Times New Roman">Example-NS04</FONT></SPAN></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Arial">
+<xmp>
+declare NS04 {
+  input a[8],b[8];
+  output f[8];
+}
+
+module NS04 {
+  f = a + b;
+}
+</xmp>
+</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">This
+example uses IO definitions and core behavior description. All
+terminals are defined as 8 bit group signals. It operates logic
+functions between input terminals and then transfers the result to an
+output terminal. The core behavior description in this example is:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>f
+= a + b</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">It
+is an easy operation and you may image the result. We will make a
+simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS04</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US"><xmp>
+a: 36, b:129, f:165
+a:  9, b: 99, f:108
+a: 13, b:141, f:154
+a:101, b: 18, f:119
+</xmp>
+</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">You
+can show the waveform style output with following command.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS04</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><A NAME="_x0000_i1037"></A><IMG SRC="NS04.png" NAME="NS04" ALIGN=BOTTOM WIDTH=700 HEIGHT=400 BORDER=0></P>
+<a href="kiso1-2.1.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.3.html">NEXT</a>
+</BODY>
+</HTML>

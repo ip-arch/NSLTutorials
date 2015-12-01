@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>State Transition</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;14595675">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>State
+Transition</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+can describe state and state transitions in a stage with NSL. At
+power on reset, state will start with 'first_state'. The state will
+not changed whenever the stage is terminated and/or invoked. </SPAN></FONT>
+</P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS17</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS17 {
+  func_in do();
+}
+
+module NS17 {
+
+  proc_name p();
+
+  func do {
+	p();
+  }
+
+  proc p {
+    state_name st1,st2,st3;
+    first_state st1;
+    state st1 goto st2;
+    state st2 goto st3;
+    state st3 { goto st1; finish; }
+  }
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS17</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+do:1  state:st1
+do:0  state:st2
+do:0  state:st3
+do:0  state:st1
+do:1  state:st1
+do:0  state:st2
+do:0  state:st3
+do:0  state:st1
+do:1  state:st1
+do:0  state:st2
+do:0  state:st3
+do:0  state:st1
+do:1  state:st1
+do:0  state:st2
+do:0  state:st3
+do:0  state:st1
+</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">The state
+is hold in a state register and the value associated with the stage
+name is defined by compiler automatically.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">Now see the
+wave form of the simulation.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS17</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P><IMG SRC="NS17.png" NAME="NS17" ALIGN=LEFT WIDTH=700 HEIGHT=400 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<a href="kiso1-2.13.html">PREV</a>
+<a href="kiso1.html">UP</a>
+</BODY>
+</HTML>

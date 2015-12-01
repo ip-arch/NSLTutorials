@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Control Internal Terminal</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;11055087">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Control
+Internal Terminals</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><SPAN LANG="en-US"><FONT FACE="Times New Roman">NSL
+uses control internal terminals for sending message to a object.
+Control internal terminals are declared with 'func_self'. We can
+refer the value of the terminal as input or output terminals.</FONT></SPAN>
+To activate a control insternal terminal, use a syntax 'control()'
+just like a function call of C language. Also control internal
+terminals can have arguments. A control internal terminal is a
+control signal of an object and the arguments are the associated data
+for the object which are required for the control operation.
+Arguments are declared as:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial, monospace">func_self</FONT></B>
+<I>control_terminal_name</I> <B><FONT FACE="Arial, monospace">(
+</FONT></B><I>argument1, argument2, ...</I> <B><FONT FACE="Arial, monospace">)
+;</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">Even
+if there is no argument at all, you cannot eliminate the parensis. We
+also declare associated behavior to the control terminal with
+<B><FONT FACE="Arial, monospace">func</FONT></B> syntax.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial, monospace">func<I>
+</I></FONT></B><I>control_terminal_name behavior_description</I></SPAN></FONT></P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS09</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+declare NS09 {
+  input a,b;
+  output f;
+}
+
+module NS09 {
+  wire c;
+  func_self do(c);
+
+  any {
+     a & ~b: do(a);
+     ~a & b: do(b);
+   }
+
+  func do {
+	f = c;
+  }
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS09</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a:0, b:0, do:0, c:x, f:x
+a:1, b:0, do:1, c:1, f:1
+a:0, b:1, do:1, c:1, f:1
+a:1, b:1, do:0, c:x, f:x
+</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+<a href="kiso1-2.6.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.8.html">NEXT</a>
+
+</P>
+</BODY>
+</HTML>

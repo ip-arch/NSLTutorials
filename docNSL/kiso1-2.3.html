@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>parallel execution</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;15352848">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040614;15365775">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		P { color: #000000 }
+		A:link { color: #0000ff }
+		A:visited { color: #800080 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" LINK="#0000ff" VLINK="#800080" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT SIZE=5><FONT FACE="Arial">parallel</FONT></FONT></B>
+<B><FONT SIZE=5><FONT FACE="Arial">execution</FONT></FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+basic action works in parallel.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><SPAN LANG="en-US"><FONT FACE="Times New Roman">Example-NS05</FONT></SPAN></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">
+<xmp>
+declare NS05 {
+  input a,b;
+  output f,g;
+}
+
+module NS05 {
+     f = a & b;
+     g = a | b;
+}
+</xmp>
+</FONT></B></SPAN></FONT></P>
+
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman"><SPAN LANG="en-US">This
+example uses IO definitions and core behavior description. Two
+behavior operation will be activated in the core behavior
+description.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">It
+is an easy operation and you may image the result. We will make a
+simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">#
+./exe NS05</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><SPAN LANG="en-US"><FONT FACE="Times New Roman">The
+result will be available on your console.</FONT></SPAN></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">a:0,
+b:0, f:0, g:0</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">a:1,
+b:0, f:0, g:1</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">a:0,
+b:1, f:0, g:1</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><B><FONT FACE="Arial">a:1,
+b:1, f:1, g:1</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<a href="kiso1-2.2.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.4.html">NEXT</a>
+</BODY>
+</HTML>

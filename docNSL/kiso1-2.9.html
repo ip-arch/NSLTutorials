@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=shift_jis">
+	<TITLE>Submodules</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="20040614;14510577">
+	<META NAME="CHANGEDBY" CONTENT="Naohiko Shimizu">
+	<META NAME="CHANGED" CONTENT="20040615;13311790">
+	<META NAME="ProgId" CONTENT="Word.Document">
+	<META NAME="Originator" CONTENT="Microsoft Word 11">
+	<STYLE>
+	<!--
+		@page { size: 21cm 29.7cm }
+		P { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="ja-JP" TEXT="#000000" DIR="LTR">
+<P ALIGN=CENTER><FONT FACE="Arial"><FONT SIZE=5><SPAN LANG="en-US"><B>Submodules</B></SPAN></FONT></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">NSL
+supports hiearachical logic design. In NSL, we call lower layer
+modules as submodules. The interface of a submodule is described in
+'declare' sentense. It will be consist of external terminals and
+optional arguments for control terminals. To declare instances of a
+submodule, we can declare at facility_declaration part as:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US"><I>submodule_name
+instance_name</I> <B><FONT FACE="Arial, monospace">;</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">Each
+submodule terminal can be refered or transfered a value. The terminal
+name is refered as:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><I>instance_name.terminal_name</I></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US">To
+invoke a control terminal of the submodule, we can use following
+syntax:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman, serif"><SPAN LANG="en-US"><I>instance_name.control_input_terminal_name</I>
+<B><FONT FACE="Arial, monospace">() ;</FONT></B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Arial, monospace"><SPAN LANG="en-US">There
+is a special syntax that invoke a control terminal and refer a output
+terminal of the submodule.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><FONT FACE="Arial, monospace"><SPAN LANG="en-US"><I>instance_name.control_input_termainal_name</I><B>(</B><I>arguments</I><B>)</B><I>.output_terminal_name</I></SPAN></FONT></P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US">You can use this
+syntax as a reference to a terminal. Now we will see an example that
+uses NS11.nsl as a submodule. In this example, we use three
+submodule instances of NS11.</SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman"><SPAN LANG="en-US"><B>Example-NS12</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+#include "../NS11/NS11.nsl"
+
+declare NS12 {
+  input a[8],b[8],c[8],d[8];
+  output f[8];
+  func_in do(a,b,c,d);
+}
+
+module NS12 {
+  NS11 mod1,mod2,mod3;
+
+  func do {
+	f = mod1.exec_add(
+		mod2.exec_add(a,b).f,
+		mod3.exec_add(c,d).f).f;
+  }
+}
+</xmp>
+</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 2cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a simulation on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe NS12</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">The
+result will be available on your console.</SPAN></FONT></P>
+<P ALIGN=JUSTIFY><BR><BR>
+</P>
+<P STYLE="margin-left: 2cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>
+<xmp>
+a: 99, b:  9, c:129, d: 36, f: 17
+a: 18, b:101, c:141, d: 13, f: 17
+a: 61, b:118, c: 13, d:  1, f:193
+a:198, b:249, c:140, d:237, f: 56
+</xmp>
+</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><FONT FACE="Times New Roman"><SPAN LANG="en-US">We
+will make a wave form on this circuitry as following command:</SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><FONT FACE="Arial"><SPAN LANG="en-US"><B>#
+./exe -wave NS12</B></SPAN></FONT></P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY STYLE="margin-left: 0.42cm"><BR><BR>
+</P>
+<P ALIGN=JUSTIFY><IMG SRC="NS12.png" NAME="NS12" ALIGN=RIGHT WIDTH=782 HEIGHT=499 BORDER=0><BR CLEAR=RIGHT><BR><BR>
+</P>
+<a href="kiso1-2.8.html">PREV</a>
+<a href="kiso1.html">UP</a>
+<a href="kiso1-2.10.html">NEXT</a>
+</BODY>
+</HTML>
